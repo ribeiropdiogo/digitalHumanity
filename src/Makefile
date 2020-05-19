@@ -17,25 +17,12 @@ print-% : ; @echo $* = $($*)
 $(ODIR)/%.o : $(CDIR)/%.c $(DEPS)
 		$(CC) $(CFLAGS) -c -o $@ $<
 
-install: regex 
-	make backend
+install:
+	yacc -d digimanity.y
+	flex digimanity.l
+	gcc -o digimanity y.tab.c
 	cp $(PROJ) /usr/local/bin/
 	make clean
-
-uninstall:
-	sudo rm -rf /usr/local/bin/${PROJ}
-
-regex: yacs
-	$(foreach dir,$(wildcard *.l),$(shell flex $(dir)))
-	mv lex.*.c $(CDIR) 2> /dev/null
-
-yacs:
-	$(foreach dir,$(wildcard *.y),$(shell yacc -d $(dir)))
-	mv y.*.h $(IDIR) 2> /dev/null
-	mv y.*.c $(CDIR) 2> /dev/null
-
-backend: $(SOURCES_OBJ)
-	$(CC) $(CFLAGS) $(wildcard $(ODIR)/*.o) -o ${PROJ} $(LIBS)
 
 clean:
 	rm -rf $(ODIR)/*.o
@@ -43,3 +30,6 @@ clean:
 	rm -rf $(CDIR)/lex.*.c
 	rm -rf $(CDIR)/y.*.c
 	rm -rf $(IDIR)/y.*.h
+	rm -rf lex.*.c
+	rm -rf y.*.c
+	rm -rf y.*.h
