@@ -2,3 +2,8 @@
 .DS_Store
 mkfromtemplate
 demos/
+*.md
+*.aux
+*.log
+*.out
+*.tex
