@@ -17,6 +17,12 @@ wd  [a-zA-Z0-9.]+
                               no respectivo campo fica so associado
                               a palavra em si, retirando as chavetas e % */
 
+\"[^\"\n]*\"                  { yytext[yylen - 1] = '\0';
+                                yylval.word = strdup(yytext + 1);
+                                return Var; }
+                              /* Palavras entre aspas são literais, pelo
+                              que qualquer elemente dentro e ignorado. */
+
 [^:space:]+                   { yylval.word = strdup(yytext);
                                 return Pal; }
                               /* Uma palavra representa qualquer outro

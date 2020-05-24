@@ -1,16 +1,31 @@
 %{
 #include <stdio.h>
 #include <stdlib.h>
-#include <striAZIOngs.h>
+#include <glib.h>
 
 // para evitar warnings.
 extern int yylex();
-
 int yyerror(char*);
+
+// Dados globais do sistema
+Dictionary meta = NULL;
 %}
 
-%token Var Pal
+/* Definicao dos dados de yylval*/
+%union {
+  char *word;                 /* Para palavras, simples e complexas */
+  gstring *plist;             /* Para listas de palavras */
+}
+
+/* Define ponto de entrada da GIC */
 %start Digimanity
+
+/* Define a tipagem de todos os terminais */
+%token <word> Var Pal
+
+/* Define a tipagem de todos os nao-terminais */
+%type <plist> PalList
+%type <word> CPal
 
 %%
 Digimanity : Meta Caderno                {;}
@@ -93,6 +108,15 @@ int yyerror(char *s)
 
 int main()
 {
+      // Inicializa dados globais
+      meta = makeDictionary();
+
 	yyparse();
+
+      // Limpar a memoria associada ao programa
+
+      // Libertar o dicionario
+      destroyDictionary(meta);
+
 	return 0;
 }
