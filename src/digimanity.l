@@ -10,6 +10,11 @@ wd  [a-zA-Z0-9.]+
 [:space:]                     { ; }
                               /* Ignora qualquer espaco */
 
+^[ \t]*#[^\n]*\n              { ; }
+                              /* Linhas a comecar com hash sign sao ignoradas
+                              na totalidade, garantindo assim que podem ser
+                              utilizadas como comentarios. */
+
 \{%{wd}%\}                    { yytext[yylen - 2] = '\0';
                                 yylval.word = strdup(yytext + 2);
                                 return Var; }
