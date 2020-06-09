@@ -48,15 +48,15 @@ int removeTupleSet(TupleSet set, char *key1, char *key2) {
 }
 
 void foreachTupleSet(TupleSet set, GHFunc func, gpoint user_data) {
-        g_hash_table_foreach(dict->table, func, user_data);
+        g_hash_table_foreach(set->table, func, user_data);
 }
 
 int sizeTupleSet(TupleSet set) {
-        return g_hash_table_size(dict->table);
+        return g_hash_table_size(set->table);
 }
 
 void destroyTupleSet(TupleSet set) {
-        g_hash_table_destroy(dict->table);
+        g_hash_table_destroy(set->table);
         free(set);
 }
 
