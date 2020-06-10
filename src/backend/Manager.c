@@ -47,6 +47,15 @@ typedef struct manager {
         Dicionary inter_relations;
 } *Manager;
 
+void synonym_foreach(gpointer key, gpointer value,
+                     gpointer user_data);
+
+void inverseof_foreach(gpointer key, gpointer value,
+                       gpointer user_data);
+
+void synonym_f(TupleSet ts1, TupleSet ts2);
+void inverseof_f(TupleSet ts1, TupleSet ts2);
+
 int add_topic(Manager man, char *topic, char *title, char *description) {
         int res = 1;
 
@@ -89,4 +98,32 @@ int add_relation(Manager man, char *relation, char *subject, char *object) {
         }
 
         return insertTupleSet(ts, subject, object);
+}
+
+void synonym_foreach(gpointer key, gpointer value,
+                     gpointer user_data) {
+        chark *key1, *key2;
+        TupleSet ts = (TupleSet)user_data;
+        char *tmp = get_keys(key, &key1, &key2);
+        insertTupleSet(ts, key1, key2);
+        free(tmp);
+}
+
+void inverseof_foreach(gpointer key, gpointer value,
+                       gpointer user_data) {
+        chark *key1, *key2;
+        TupleSet ts = (TupleSet)user_data;
+        char *tmp = get_keys(key, &key1, &key2);
+        insertTupleSet(ts, key2, key1);
+        free(tmp);
+}
+
+void synonym_f(TupleSet ts1, TupleSet ts2) {
+        foreachTupleSet(ts1, synonym_foreach, ts2);
+        foreachTupleSet(ts2, synonym_foreach, ts1);
+}
+
+void inverseof_f(TupleSet ts1, TupleSet ts2) {
+        foreachTupleSet(ts1, inverseof_foreach, ts2);
+        foreachTupleSet(ts2, inverseof_foreach, ts1);
 }
