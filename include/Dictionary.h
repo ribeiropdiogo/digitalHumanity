@@ -5,7 +5,7 @@
 
 typedef struct dictionary * Dictionary;
 
-Dictionary makeDictionary();
+Dictionary makeDictionary(GDestroyNotify value_destroy_fun);
 
 gpointer getValueDictionary(Dictionary dict, char *key);
 

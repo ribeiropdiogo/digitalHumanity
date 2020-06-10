@@ -53,8 +53,44 @@ void synonym_foreach(gpointer key, gpointer value,
 void inverseof_foreach(gpointer key, gpointer value,
                        gpointer user_data);
 
+void intreat_foreach(gpointer key, gpointer value,
+                     gpointer user_data);
+
+void treatment_foreach(gpointer key, gpointer value,
+                       gpointer user_data);
+
 void synonym_f(TupleSet ts1, TupleSet ts2);
 void inverseof_f(TupleSet ts1, TupleSet ts2);
+void make_inter_relation(Manager man);
+void make_reserved_relation(Manager man);
+
+Manager init_manager() {
+        Manager man = malloc(sizeof(struct manager));
+        man->descriptions = makeDictionary(free);
+        man->titles = makeDictionary(free);
+        man->free_relations = makeDictionary(destroyTupleSet);
+
+        make_inter_relation(man);
+        make_reserved_relation(man);
+
+        return man;
+}
+
+void apply_inter_relations(Manager man) {
+        char buff[100];
+        memcpy(buff, &(man->free_relations), sizeof(Dictionary));
+        memcpy(buff + sizeof(Dictionary), &(man->relation_treatment), sizeof(Dictionary));
+        foreachDictionary(man->inter_relations, treatment_foreach, buff);
+}
+
+void destroy_manager(Manager man) {
+        destroyDictionary(man->descriptions);
+        destroyDictionary(man->titles);
+        destroyDictionary(man->free_relations);
+        destroyDictionary(man->relation_treatment);
+        destroyDictionary(man->inter_relations);
+        destroyDictionary(man->reserved_relations);
+}
 
 int add_topic(Manager man, char *topic, char *title, char *description) {
         int res = 1;
@@ -102,7 +138,7 @@ int add_relation(Manager man, char *relation, char *subject, char *object) {
 
 void synonym_foreach(gpointer key, gpointer value,
                      gpointer user_data) {
-        chark *key1, *key2;
+        char *key1, *key2;
         TupleSet ts = (TupleSet)user_data;
         char *tmp = get_keys(key, &key1, &key2);
         insertTupleSet(ts, key1, key2);
@@ -111,11 +147,30 @@ void synonym_foreach(gpointer key, gpointer value,
 
 void inverseof_foreach(gpointer key, gpointer value,
                        gpointer user_data) {
-        chark *key1, *key2;
+        char *key1, *key2;
         TupleSet ts = (TupleSet)user_data;
         char *tmp = get_keys(key, &key1, &key2);
         insertTupleSet(ts, key2, key1);
         free(tmp);
+}
+
+void intreat_foreach(gpointer key, gpointer value,
+                     gpointer user_data) {
+        char *buff = (char*)user_data;
+        Dicionary free_rel = *(Dictionary*)buff;
+        TreatFunc tf = *(TreatFunc*)(buff + sizeof(Dictionary));
+        TupleSet ts1 = (TupleSet)getValueDictionary(free_rel, key1);
+        TupleSet ts2 = (TupleSet)getValueDictionary(free_rel, key2);
+        (*tf)(ts1, ts2);
+}
+
+void treatment_foreach(gpointer key, gpointer value,
+                       gpointer user_data) {
+        Dicionary rel_treat = *(Dicionary*)(buff + sizeof(Dictionary));
+        TreatFunc tf = (TupleSet)getValueDictionary(rel_treat, key);
+        memcpy( ((char*)user_data) + sizeof(Dictionary),
+                &tf, sizeof(TreatFunc) );
+        foreachTupleSet((TupleSet)value, intreat_foreach, user_data);
 }
 
 void synonym_f(TupleSet ts1, TupleSet ts2) {
@@ -126,4 +181,30 @@ void synonym_f(TupleSet ts1, TupleSet ts2) {
 void inverseof_f(TupleSet ts1, TupleSet ts2) {
         foreachTupleSet(ts1, inverseof_foreach, ts2);
         foreachTupleSet(ts2, inverseof_foreach, ts1);
+}
+
+void make_inter_relation(Manager man) {
+        man->relation_treatment = makeDictionary(NULL);
+        man->inter_relations = makeDictionary(destroyTupleSet);
+
+        // Tratador do precicado synonym
+        insertDictionary(man->relation_treatment,
+                         g_strdup("synonym"), synonym_f);
+        insertDictionary(man->inter_relations,
+                         g_strdup("synonym"), makeTupleSet());
+
+        // Tratador do predicado inverse_of
+        insertDictionary(man->relation_treatment,
+                         g_strdup("inverse_of"), inverse_of);
+        insertDictionary(man->inter_relations,
+                         g_strdup("inverse_of"), makeTupleSet());
+}
+
+void make_reserved_relation(Manager man) {
+        man->reserved_relations = makeDictionary(destroyTupleSet);
+
+        insertDictionary(man->reserved_relations,
+                         g_strdup("img"), makeTupleSet());
+        insertDictionary(man->reserved_relations,
+                         g_strdup("attach"), makeTupleSet());
 }

@@ -17,7 +17,7 @@ void foreachTupleSet(TupleSet dict, GHFunc func, gpoint user_data);
 
 int sizeTupleSet(TupleSet dict);
 
-void destroyTupleSet(TupleSet dict);
+void destroyTupleSet(gpointer dict);
 
 char *get_keys(char *code, char **ekey1, char **ekey2);
 

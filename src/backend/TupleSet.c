@@ -55,7 +55,8 @@ int sizeTupleSet(TupleSet set) {
         return g_hash_table_size(set->table);
 }
 
-void destroyTupleSet(TupleSet set) {
+void destroyTupleSet(gpointer vset) {
+        TupleSet set = (TupleSet)vset;
         g_hash_table_destroy(set->table);
         free(set);
 }
