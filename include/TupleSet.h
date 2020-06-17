@@ -13,7 +13,7 @@ int insertTupleSet(TupleSet dict, char *key1, char *key2);
 
 int removeTupleSet(TupleSet dict, char *key1, char *key2);
 
-void foreachTupleSet(TupleSet dict, GHFunc func, gpoint user_data);
+void foreachTupleSet(TupleSet dict, GHFunc func, gpointer user_data);
 
 int sizeTupleSet(TupleSet dict);
 

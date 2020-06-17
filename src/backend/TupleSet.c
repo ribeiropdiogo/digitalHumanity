@@ -47,7 +47,7 @@ int removeTupleSet(TupleSet set, char *key1, char *key2) {
         return res;
 }
 
-void foreachTupleSet(TupleSet set, GHFunc func, gpoint user_data) {
+void foreachTupleSet(TupleSet set, GHFunc func, gpointer user_data) {
         g_hash_table_foreach(set->table, func, user_data);
 }
 

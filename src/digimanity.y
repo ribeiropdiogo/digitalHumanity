@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <glib.h>
+#include "Dictionary.h"
+#include "Manager.h"
 
 // para evitar warnings.
 extern int yylex();
@@ -14,7 +16,7 @@ Dictionary meta = NULL;
 /* Definicao dos dados de yylval*/
 %union {
   char *word;                 /* Para palavras, simples e complexas */
-  gstring *plist;             /* Para listas de palavras */
+  GString *plist;             /* Para listas de palavras */
 }
 
 /* Define ponto de entrada da GIC */
@@ -22,6 +24,7 @@ Dictionary meta = NULL;
 
 /* Define a tipagem de todos os terminais */
 %token <word> Var Pal
+%token TitleTab MetaTag TituloTag TriplosTag Paragrafo
 
 /* Define a tipagem de todos os nao-terminais */
 %type <plist> PalList
@@ -31,15 +34,38 @@ Dictionary meta = NULL;
 Digimanity : Meta Caderno                {;}
            ;
 
+Meta : TitleTab MetaTag MetaList             {;}
+                                         /* Encontrou a meta tag, Por isso,
+                                         processa toda a metalist. */
+     ;
+
 Caderno : /* Vazio */
-        | Caderno Documento Triplos      {;}
+        | Caderno Documento TriplosSec   {;}
         ;
 
 Documento : Conceito Titulo Texto        {;}
           ;
 
+Conceito : TitleTab CPal                 {;}
+                                         /* Começou um novo conceito. */
+         ;
+
+Titulo : TituloTag ':' PalList           {;}
+                                         /* Definicao do titulo per si. */
+       ;
+
+Texto : /* Vazio */
+      | Texto PalList Paragrafo
+      ;
+
+TriplosSec : TriplosTag ':' Triplos      {;}
+           ;
+
 Triplos : /* Vazio */
         | Triplos Sujeito ParesRelacao   {;}
+        ;
+
+Sujeito : CPal                           {;}
         ;
 
 ParesRelacao : PRList '.'                {;}
@@ -52,12 +78,15 @@ PRList : PRListElem                      {;}
 PRListElem : Relacao ComplexObject       {;}
            ;
 
+Relacao : CPal                           {;}
+        ;
+
 ComplexObject : CPal                     {;}
               | ComplexObject ',' CPal   {;}
               ;
 
-Meta : /* Vazio */
-     | Meta MetaElem                     {;}
+MetaList : /* Vazio */
+     | MetaList MetaElem                     {;}
      ;
 
 MetaElem : Pal '=' PalList                { if(containsDictionary(meta, $1)) {
@@ -67,15 +96,11 @@ MetaElem : Pal '=' PalList                { if(containsDictionary(meta, $1)) {
                                             } }
                                           /* Associa os metados a respectiva
                                           palavra. */
-         | ':' CPal ':' CPal ':' CPal     {;}
+
          ;
 
-PalList : CPal                            { $$ = g_string_new(NULL);
-                                            g_string_append($$, $1); }
-                                          /* Inicia o processamento da PalList,
-                                          inicializa o growing array e insere
-                                          a respectiva palavra */
-        | PalList CPal                    { $$ = g_string_append($1, " ");
+PalList : CPal                     {;}
+        | PalList CPal         { $$ = g_string_append($1, " ");
                                             $$ = g_string_append($$, $2); }
                                           /* Adiciona a palavra encontrada ao
                                           array de palavras existentes. */
@@ -109,7 +134,7 @@ int yyerror(char *s)
 int main()
 {
       // Inicializa dados globais
-      meta = makeDictionary();
+      meta = makeDictionary(NULL);
 
 	yyparse();
 

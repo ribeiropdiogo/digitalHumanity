@@ -18,11 +18,9 @@ $(ODIR)/%.o : $(CDIR)/%.c $(DEPS)
 		$(CC) $(CFLAGS) -c -o $@ $<
 
 install:
-	yacc -d digimanity.y
+	yacc -d -v digimanity.y
 	flex digimanity.l
-	gcc -o digimanity y.tab.c
-	cp $(PROJ) /usr/local/bin/
-	make clean
+	$(CC) $(CFLAGS) -c -o digimanity y.tab.c
 
 clean:
 	rm -rf $(ODIR)/*.o

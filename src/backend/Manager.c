@@ -83,6 +83,10 @@ void apply_inter_relations(Manager man) {
         foreachDictionary(man->inter_relations, treatment_foreach, buff);
 }
 
+void dump_manager(Manager man, char *dir) {
+        apply_inter_relations(man);
+}
+
 void destroy_manager(Manager man) {
         destroyDictionary(man->descriptions);
         destroyDictionary(man->titles);

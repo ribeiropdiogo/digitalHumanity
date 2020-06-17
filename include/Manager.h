@@ -10,6 +10,7 @@ typedef struct manager *Manager;
 
 Manager init_manager();
 void apply_inter_relations(Manager man);
+void dump_manager(Manager man, char *dir);
 void destroy_manager(Manager man);
 int add_topic(Manager man, char *topic, char *title, char *description);
 int add_inter_relation(Manager man, char *relation, char *subject, char *object);
