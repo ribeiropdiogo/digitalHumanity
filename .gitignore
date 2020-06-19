@@ -7,3 +7,8 @@ demos/
 *.log
 *.out
 *.tex
+*.output
+y.*.c
+y.*.h
+lex.*.c
+digimanity

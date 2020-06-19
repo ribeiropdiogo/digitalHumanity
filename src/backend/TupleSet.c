@@ -1,14 +1,14 @@
 #include <glib.h>
 #include "TupleSet.h"
 
-typedef struct tuple_set {
+typedef struct tuple_dictionary {
         GHashTable *table;
 } *TupleSet;
 
 char *merge_keys(char *key1, char *key2);
 
 TupleSet makeTupleSet() {
-        TupleSet set = malloc(sizeof(struct tuple_set));
+        TupleSet set = malloc(sizeof(struct tuple_dictionary));
 
         set->table = g_hash_table_new_full(g_str_hash, g_str_equal, g_free, NULL);
 
@@ -66,7 +66,7 @@ char *merge_keys(char *key1, char *key2) {
 
         g_string_printf(string, "%s<->%s", key1, key2);
 
-        return g_string_new(string, FALSE);
+        return g_string_free(string, FALSE);
 }
 
 char *get_keys(char *code, char **ekey1, char **ekey2) {

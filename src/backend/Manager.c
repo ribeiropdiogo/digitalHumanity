@@ -14,7 +14,7 @@ typedef struct manager {
 
            contem valores do tipo `char *`.
          */
-        Dicionary titles;
+        Dictionary titles;
 
         /*
            Associa a cada relação de inter-relações, a
@@ -32,19 +32,19 @@ typedef struct manager {
            é constituido por vários elementos do tipo
            `<sujeito, objeto>`.
          */
-        Dicionary free_relations;
+        Dictionary free_relations;
 
         /*
            Associa a cada relação o conjunto de tuplos
            que tiram partido dessa.
          */
-        Dicionary reserved_relations;
+        Dictionary reserved_relations;
 
         /*
            Associa a cada relação inter-relações o conjunto
            de tuplos que tiram partido desta.
          */
-        Dicionary inter_relations;
+        Dictionary inter_relations;
 } *Manager;
 
 void synonym_foreach(gpointer key, gpointer value,
@@ -99,25 +99,25 @@ void destroy_manager(Manager man) {
 int add_topic(Manager man, char *topic, char *title, char *description) {
         int res = 1;
 
-        if(containsDictionary(descriptions, topic)
-           || containsDictionary(titles, topic))
+        if(containsDictionary(man->descriptions, topic)
+           || containsDictionary(man->titles, topic))
                 return 0;
 
         // Insere o titulo
-        insertDictionary(titles, topic, title);
+        insertDictionary(man->titles, topic, title);
 
         // Insere a descricao
-        insertDictionary(descriptions, topic, description);
+        insertDictionary(man->descriptions, topic, description);
 
         return res;
 }
 
 int add_inter_relation(Manager man, char *relation, char *subject, char *object) {
         // Se relacao nao existe, abortar.
-        if(!containsDictionary(inter_relations, relation))
+        if(!containsDictionary(man->inter_relations, relation))
                 return 0;
 
-        TupleSet ts = (TupleSet)getValueDictionary(inter_relations, relation);
+        TupleSet ts = (TupleSet)getValueDictionary(man->inter_relations, relation);
 
         return insertTupleSet(ts, subject, object);
 }
@@ -126,15 +126,15 @@ int add_relation(Manager man, char *relation, char *subject, char *object) {
         TupleSet ts = NULL;
 
         // se se trata de uma relacao reservada
-        if( containsDictionary(reserved_relations, relation) ) {
-                ts = (TupleSet)getValueDictionary(reserved_relations, relation);
+        if( containsDictionary(man->reserved_relations, relation) ) {
+                ts = (TupleSet)getValueDictionary(man->reserved_relations, relation);
         } else
-                ts = (TupleSet)getValueDictionary(free_relations, relation);
+                ts = (TupleSet)getValueDictionary(man->free_relations, relation);
 
         // Se nao existe
         if(!ts) {
                 ts = makeTupleSet();
-                insertDictionary(free_relations, relation, ts);
+                insertDictionary(man->free_relations, relation, ts);
         }
 
         return insertTupleSet(ts, subject, object);
@@ -160,18 +160,20 @@ void inverseof_foreach(gpointer key, gpointer value,
 
 void intreat_foreach(gpointer key, gpointer value,
                      gpointer user_data) {
-        char *buff = (char*)user_data;
-        Dicionary free_rel = *(Dictionary*)buff;
-        TreatFunc tf = *(TreatFunc*)(buff + sizeof(Dictionary));
+        char *key1, *key2;
+        Dictionary free_rel = *(Dictionary*)user_data;
+        TreatFunc tf = *(TreatFunc*)(((char*)user_data) + sizeof(Dictionary));
+        char *tmp = get_keys(key, &key1, &key2);
         TupleSet ts1 = (TupleSet)getValueDictionary(free_rel, key1);
         TupleSet ts2 = (TupleSet)getValueDictionary(free_rel, key2);
         (*tf)(ts1, ts2);
+        free(tmp);
 }
 
 void treatment_foreach(gpointer key, gpointer value,
                        gpointer user_data) {
-        Dicionary rel_treat = *(Dicionary*)(buff + sizeof(Dictionary));
-        TreatFunc tf = (TupleSet)getValueDictionary(rel_treat, key);
+        Dictionary rel_treat = *(Dictionary*)(((char*)user_data) + sizeof(Dictionary));
+        TreatFunc tf = (TreatFunc)getValueDictionary(rel_treat, key);
         memcpy( ((char*)user_data) + sizeof(Dictionary),
                 &tf, sizeof(TreatFunc) );
         foreachTupleSet((TupleSet)value, intreat_foreach, user_data);
@@ -199,7 +201,7 @@ void make_inter_relation(Manager man) {
 
         // Tratador do predicado inverse_of
         insertDictionary(man->relation_treatment,
-                         g_strdup("inverse_of"), inverse_of);
+                         g_strdup("inverse_of"), inverseof_f);
         insertDictionary(man->inter_relations,
                          g_strdup("inverse_of"), makeTupleSet());
 }

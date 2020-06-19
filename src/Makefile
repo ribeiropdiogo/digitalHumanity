@@ -15,12 +15,19 @@ LIBS=`pkg-config --libs glib-2.0`
 print-% : ; @echo $* = $($*)
 
 $(ODIR)/%.o : $(CDIR)/%.c $(DEPS)
-		$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
-install:
-	yacc -d -v digimanity.y
-	flex digimanity.l
-	$(CC) $(CFLAGS) -c -o digimanity y.tab.c
+install: regex
+	make backend
+
+regex:
+	yacc -d ${PROJ}.y
+	flex ${PROJ}.l
+	mv y.*.c $(CDIR) 2> /dev/null
+	mv y.*.h $(IDIR) 2> /dev/null
+
+backend: $(SOURCES_OBJ)
+	$(CC) $(CFLAGS) $(wildcard $(ODIR)/*.o) -o ${PROJ} $(LIBS)
 
 clean:
 	rm -rf $(ODIR)/*.o
@@ -28,6 +35,6 @@ clean:
 	rm -rf $(CDIR)/lex.*.c
 	rm -rf $(CDIR)/y.*.c
 	rm -rf $(IDIR)/y.*.h
-	rm -rf lex.*.c
-	rm -rf y.*.c
-	rm -rf y.*.h
+	rm -rf $(CDIR)/lex.*.c
+	rm -rf $(CDIR)/y.*.c
+	rm -rf $(CDIR)/y.*.h

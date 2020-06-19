@@ -15,7 +15,7 @@ int insertDictionary(Dictionary dict, char *key, gpointer value);
 
 int removeDictionary(Dictionary dict, char *key);
 
-void foreachDictionary(Dictionary dict, GHFunc func);
+void foreachDictionary(Dictionary dict, GHFunc func, void *data);
 
 void appendDictionary(Dictionary dict, char *key, gpointer value);
 

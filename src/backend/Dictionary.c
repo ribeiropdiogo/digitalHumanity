@@ -41,8 +41,8 @@ int removeDictionary(Dictionary dict, char *key) {
         return (int)g_hash_table_remove(dict->table, key);
 }
 
-void foreachDictionary(Dictionary dict, GHFunc func) {
-        g_hash_table_foreach(dict->table, func, NULL);
+void foreachDictionary(Dictionary dict, GHFunc func, void *data) {
+        g_hash_table_foreach(dict->table, func, data);
 }
 
 int sizeDictionary(Dictionary dict) {
