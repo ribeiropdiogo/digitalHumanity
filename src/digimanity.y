@@ -127,12 +127,6 @@ CPal : Pal                                { $$ = $1; }
 
 #include "../lex.yy.c"
 
-int yyerror(char *s)
-{
-	fprintf(stderr, "ERRO: %s \n", s);
-	return 0;
-}
-
 int main(int argc, char **argv)
 {
       // Inicializa dados globais
