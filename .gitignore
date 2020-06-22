@@ -12,3 +12,4 @@ y.*.c
 y.*.h
 lex.*.c
 digimanity
+*.caderno

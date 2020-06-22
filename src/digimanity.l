@@ -11,13 +11,14 @@ char auxbuff[500];
 
 %option noyywrap
 
-%s TRIPLOS
+%s TRIPLOS META TITLE
 
 wd  [a-zA-Z0-9.]+
 sp [ \t]
 %%
-<TRIPLOS>[.;,]                               {return yytext[0];}
-
+<META>\<\-                     { return Attrib;}
+<TRIPLOS>[.;,]                  {return yytext[0];}
+<META>[;]                       { return yytext[0];}
 <INITIAL>(\n)+                           {return Paragrafo;}
 
 \n.*                             { tokenpos = 0;
@@ -38,7 +39,7 @@ sp [ \t]
                                   return TitleTab; }
                                 /* Guarda o numero de carateres '=' encontrados. */
 
-(?i:meta)                       { return MetaTag; }
+(?i:meta)                       { BEGIN(META); return MetaTag; }
 
 @tit{sp}*:                 { return TituloTag; }
 
@@ -63,11 +64,17 @@ sp [ \t]
                                 /* Uma palavra representa qualquer outro
                                 conjunto de 1 ou + carateres que nao sejam
                                 um espaco de qualquer tipo */
-<INITIAL>[^ =\n]+                      { yylval.word = strdup(yytext);
+<INITIAL>[^ =\n]+          {yylval.word = strdup(yytext);
                                   return Pal; }
                                 /* Uma palavra representa qualquer outro
                                 conjunto de 1 ou + carateres que nao sejam
                                 um espaco de qualquer tipo */
+<META>[^ =\n;]+          {yylval.word = strdup(yytext);
+                                  return Pal; }
+                                /* Uma palavra representa qualquer outro
+                                conjunto de 1 ou + carateres que nao sejam
+                                um espaco de qualquer tipo */
+.                              {return yytext[0];}
 %%
 
 char *char_repeat(int n, char k) {

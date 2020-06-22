@@ -26,7 +26,7 @@ Dictionary meta = NULL;
 /* Define a tipagem de todos os terminais */
 %token <word> Var Pal
 %token <count> TitleTab
-%token MetaTag TituloTag TriplosTag Paragrafo
+%token MetaTag TituloTag TriplosTag Paragrafo Attrib
 
 /* Define a tipagem de todos os nao-terminais */
 %type <plist> PalList EndingPalList
@@ -84,17 +84,18 @@ ComplexObject : CPal                     {;}
               | ComplexObject ',' CPal   {;}
               ;
 
-MetaList : Paragrafo
-     | MetaList MetaElem                     {;}
+MetaList : /* Vazio*/
+     | MetaList MetaElem ';'                     {;}
      ;
 
-MetaElem : Pal '=' EndingPalList                { if(containsDictionary(meta, $1)) {
+MetaElem : Pal Attrib PalList                { if(containsDictionary(meta, $1)) {
                                                  // emitir erro
                                             } else {
                                                 insertDictionary(meta, $1, g_string_free($3, FALSE));
                                             } }
                                           /* Associa os metados a respectiva
                                           palavra. */
+         | CPal CPal CPal                 {;}
 
          ;
 
