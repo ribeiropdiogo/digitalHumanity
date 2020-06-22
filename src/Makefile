@@ -21,7 +21,7 @@ install: regex
 	make backend
 
 regex:
-	yacc -d ${PROJ}.y
+	yacc -d -v ${PROJ}.y
 	flex ${PROJ}.l
 	mv y.*.c $(CDIR) 2> /dev/null
 	mv y.*.h $(IDIR) 2> /dev/null

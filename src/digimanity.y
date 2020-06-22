@@ -29,7 +29,7 @@ Dictionary meta = NULL;
 %token MetaTag TituloTag TriplosTag Paragrafo
 
 /* Define a tipagem de todos os nao-terminais */
-%type <plist> PalList
+%type <plist> PalList EndingPalList
 %type <word> CPal
 
 %%
@@ -52,22 +52,19 @@ Conceito : TitleTab CPal                 {;}
                                          /* Começou um novo conceito. */
          ;
 
-Titulo : TituloTag ':' PalList           {;}
+Titulo : TituloTag EndingPalList              {;}
                                          /* Definicao do titulo per si. */
        ;
 
 Texto : /* Vazio */
-      | Texto PalList Paragrafo
+      | Texto EndingPalList
       ;
 
-TriplosSec : TriplosTag ':' Triplos      {;}
+TriplosSec : TriplosTag Triplos      {;}
            ;
 
 Triplos : /* Vazio */
-        | Triplos Sujeito ParesRelacao   {;}
-        ;
-
-Sujeito : CPal                           {;}
+        | Triplos CPal ParesRelacao   {;}
         ;
 
 ParesRelacao : PRList '.'                {;}
@@ -87,11 +84,11 @@ ComplexObject : CPal                     {;}
               | ComplexObject ',' CPal   {;}
               ;
 
-MetaList : /* Vazio */
+MetaList : Paragrafo
      | MetaList MetaElem                     {;}
      ;
 
-MetaElem : Pal '=' PalList                { if(containsDictionary(meta, $1)) {
+MetaElem : Pal '=' EndingPalList                { if(containsDictionary(meta, $1)) {
                                                  // emitir erro
                                             } else {
                                                 insertDictionary(meta, $1, g_string_free($3, FALSE));
@@ -101,9 +98,10 @@ MetaElem : Pal '=' PalList                { if(containsDictionary(meta, $1)) {
 
          ;
 
-PalList : CPal                     {;}
-        | PalList CPal         { $$ = g_string_append($1, " ");
-                                            $$ = g_string_append($$, $2); }
+EndingPalList : PalList Paragrafo                {;}
+
+PalList : CPal                            {;}
+        | PalList CPal                    { ; }
                                           /* Adiciona a palavra encontrada ao
                                           array de palavras existentes. */
         ;
