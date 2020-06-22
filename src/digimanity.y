@@ -29,7 +29,7 @@ Dictionary meta = NULL;
 %token MetaTag TituloTag TriplosTag Paragrafo Attrib
 
 /* Define a tipagem de todos os nao-terminais */
-%type <plist> PalList EndingPalList
+%type <plist> PalList EndingPalList Texto
 %type <word> CPal
 
 %%
@@ -45,7 +45,7 @@ Caderno : /* Vazio */
         | Caderno Documento TriplosSec   {;}
         ;
 
-Documento : Conceito Titulo Texto        {;}
+Documento : Conceito Titulo Texto        {printf("%s", g_string_free($3,FALSE));}
           ;
 
 Conceito : TitleTab CPal                 {;}
@@ -56,8 +56,11 @@ Titulo : TituloTag EndingPalList              {;}
                                          /* Definicao do titulo per si. */
        ;
 
-Texto : /* Vazio */
-      | Texto EndingPalList
+Texto : /* Vazio */                     {$$ = g_string_new(NULL);}
+      | Texto EndingPalList             {$$ = $1;
+                                         g_string_append_printf($$,
+                                                 "<p>%s</p>\n",
+                                                 g_string_free($2, FALSE));}
       ;
 
 TriplosSec : TriplosTag Triplos      {;}
@@ -99,10 +102,12 @@ MetaElem : Pal Attrib PalList                { if(containsDictionary(meta, $1)) 
 
          ;
 
-EndingPalList : PalList Paragrafo                {;}
+EndingPalList : PalList Paragrafo         {$$ = $1;}
+              ;
 
-PalList : CPal                            {;}
-        | PalList CPal                    { ; }
+PalList : CPal                            { $$ = g_string_new($1); }
+        | PalList CPal                    { $$ = $1;
+                                            g_string_append_printf($$, " %s", $2); }
                                           /* Adiciona a palavra encontrada ao
                                           array de palavras existentes. */
         ;
