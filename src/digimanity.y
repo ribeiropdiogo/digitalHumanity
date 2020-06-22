@@ -9,6 +9,10 @@
 extern int yylex();
 int yyerror(char*);
 
+void free_array(gpointer data);
+void foreach_par_relacao(gpointer key,
+                gpointer value, gpointer user_data);
+
 // Dados globais do sistema
 Dictionary meta = NULL;
 %}
@@ -18,6 +22,8 @@ Dictionary meta = NULL;
         int count;              /* Conta o numero de = */
         char *word;             /* Para palavras, simples e complexas */
         GString *plist;         /* Para listas de palavras */
+        GArray *array;          /* Para ComplexObject */
+        GHashTable *table;      /* Para PRList e ParesRelacao */
 }
 
 /* Define ponto de entrada da GIC */
@@ -29,8 +35,10 @@ Dictionary meta = NULL;
 %token MetaTag TituloTag TriplosTag Paragrafo Attrib
 
 /* Define a tipagem de todos os nao-terminais */
-%type <plist> PalList EndingPalList Texto
-%type <word> CPal
+%type <plist> PalList EndingPalList Texto Titulo
+%type <word> CPal Conceito
+%type <array> ComplexObject
+%type <table> PRList ParesRelacao
 
 %%
 Digimanity : Meta Caderno                {;}
@@ -45,14 +53,16 @@ Caderno : /* Vazio */
         | Caderno Documento TriplosSec   {;}
         ;
 
-Documento : Conceito Titulo Texto        {printf("%s", g_string_free($3,FALSE));}
+Documento : Conceito Titulo Texto        { printf("#################################\n");
+                                           printf("-> conceito: |%s|, titulo |%s|:\n", $1, g_string_free($2, FALSE));
+                                           printf("%s", g_string_free($3,FALSE));}
           ;
 
-Conceito : TitleTab CPal                 {;}
+Conceito : TitleTab CPal                 { $$ = $2;}
                                          /* Começou um novo conceito. */
          ;
 
-Titulo : TituloTag EndingPalList              {;}
+Titulo : TituloTag EndingPalList              {$$ = $2;}
                                          /* Definicao do titulo per si. */
        ;
 
@@ -67,24 +77,23 @@ TriplosSec : TriplosTag Triplos      {;}
            ;
 
 Triplos : /* Vazio */
-        | Triplos CPal ParesRelacao   {;}
+        | Triplos CPal ParesRelacao   {g_hash_table_foreach($3, foreach_par_relacao, $2);
+                                       g_hash_table_destroy($3);}
         ;
 
-ParesRelacao : PRList '.'                {;}
+ParesRelacao : PRList '.'                {$$ = $1;}
              ;
 
-PRList : PRListElem                      {;}
-       | PRList ';' PRListElem           {;}
+PRList : CPal ComplexObject              {$$ = g_hash_table_new_full(g_str_hash,
+                                                        g_str_equal, free, free_array);
+                                          g_hash_table_insert($$, $1, $2);}
+       | PRList ';' CPal ComplexObject   {g_hash_table_insert($1, $3, $4);
+                                          $$ = $1;}
        ;
 
-PRListElem : Relacao ComplexObject       {;}
-           ;
-
-Relacao : CPal                           {;}
-        ;
-
-ComplexObject : CPal                     {;}
-              | ComplexObject ',' CPal   {;}
+ComplexObject : CPal                     {$$ = g_array_new(FALSE, FALSE, sizeof(char*));
+                                          $$ = g_array_append_val($$, $1);}
+              | ComplexObject ',' CPal   {$$ = g_array_append_val($1, $3);}
               ;
 
 MetaList : /* Vazio*/
@@ -130,6 +139,25 @@ CPal : Pal                                { $$ = $1; }
 %%
 
 #include "../lex.yy.c"
+
+void free_array(gpointer data) {
+        g_array_free((GArray*)data, TRUE);
+
+}
+
+void foreach_par_relacao(gpointer key,
+                gpointer value, gpointer user_data) {
+        char *elem, *relacao = (char*)key, *sujeito = (char*)user_data;
+        GArray *arr = (GArray*)value;
+        guint i, size = arr->len;
+
+        //printf("\tpara sujeito |%s|:\n", sujeito);
+        //printf("\t\tpara a relacao |%s|:\n", relacao);
+        for(i = 0; i < size; i++) {
+                elem = g_array_index(arr, char*, i);
+                //printf("\t\t\tobjeto |%s|:\n", elem);
+        }
+}
 
 int main(int argc, char **argv)
 {
