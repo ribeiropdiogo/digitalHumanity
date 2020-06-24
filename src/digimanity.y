@@ -49,14 +49,14 @@ Manager man = NULL;
 %type <table> PRList ParesRelacao
 
 %%
-Digimanity : Meta Caderno               {;}
+Digimanity : Meta Caderno               { ; }
                                         /* Definição mais abrangente da gramática.
                                         Composta por uma secção de metados e um caderno.
                                         A secção meta pode ser omitida, porém, isso irá
                                         originar um warning. */
            ;
 
-Meta : TitleTab MetaTag MetaList        {;}
+Meta : TitleTab MetaTag MetaList        { ; }
                                         /* Definição da secção meta. Esta é um sinalizador
                                         de titulo, seguido pela keyword meta e uma lista
                                         de elementos que são definidos na metalist. Deve
@@ -64,88 +64,88 @@ Meta : TitleTab MetaTag MetaList        {;}
      ;
 
 Caderno : /* Vazio */
-        | Caderno Documento TriplosSec  {;}
+        | Caderno Documento TriplosSec  { ; }
                                         /* Define o que é entendido como um caderno, sendo
                                         que este corresponde a um conjunto de documentos
                                         e a sua respectiva secção de triplos. */
         ;
 
-Documento : Conceito Titulo Texto       {add_topic(man, $1,
+Documento : Conceito Titulo Texto       { add_topic(man, $1,
                                                         g_string_free($2, FALSE),
-                                                        g_string_free($3, FALSE));}
+                                                        g_string_free($3, FALSE)); }
                                         /* Um documento é um triplo de <conceito, titulo, texto>
                                         pelo que apos processado, é adicionado na estrutura principal.
                                         O texto corresponde a um texto semi-processado em HTML, separando
                                         as linhas por paragrafos. */
           ;
 
-Conceito : TitleTab CPal                { $$ = $2;}
+Conceito : TitleTab CPal                { $$ = $2; }
                                         /* Definição de um novo conceito, o conceito fica com
                                         o nome da produção correspondente. */
          ;
 
-Titulo : TituloTag EndingPalList        {$$ = $2;}
+Titulo : TituloTag EndingPalList        { $$ = $2; }
                                         /* Definicao do titulo per si. */
        ;
 
-Texto : /* Vazio */                     {$$ = g_string_new(NULL);}
+Texto : /* Vazio */                     { $$ = g_string_new(NULL); }
                                         /* Um texto é um conjunto de zero ou mais conjuntos
                                         de palavras terminados por um paragrafos. Quando
                                         é feito um shift de texto vazio, é inicializado um
                                         buffer vazio. */
-      | Texto EndingPalList             {$$ = $1;
-                                         g_string_append_printf($$,
+      | Texto EndingPalList             { $$ = $1;
+                                          g_string_append_printf($$,
                                                  "<p>%s</p>\n",
-                                                 g_string_free($2, FALSE));}
+                                                 g_string_free($2, FALSE)); }
                                         /* Quando detetado um conjunto de palavras terminado
                                         por um paragrafo, este é adicionado ao texto, com um
                                         pré-processamento que permite a separação por paragráfos
                                         no HTML. */
       ;
 
-TriplosSec : TriplosTag Triplos         {;}
+TriplosSec : TriplosTag Triplos         { ; }
                                         /* A secção de triplos corresponde à tag de triplos e
                                         os respectivos triplos que esta possui. */
            ;
 
-Triplos : /* Vazio */                   {;}
+Triplos : /* Vazio */                   { ; }
                                         /* O conjunto de triplos explicitado pode ser vazio. */
-        | Triplos CPal ParesRelacao     {g_hash_table_foreach($3, foreach_par_relacao, $2);
-                                         g_hash_table_destroy($3);}
+        | Triplos CPal ParesRelacao     { g_hash_table_foreach($3, foreach_par_relacao, $2);
+                                          g_hash_table_destroy($3); }
                                         /* Cada triplo corresponde a um sujeito, seguido por,
                                         potencialmente, vários pares relação separados por ';' */
         ;
 
-ParesRelacao : PRList '.'               {$$ = $1;}
+ParesRelacao : PRList '.'               { $$ = $1; }
                                         /* Os pares relação devem ser obrigatoriamente
                                         terminados pelo '.' */
              ;
 
-PRList : CPal ComplexObject             {$$ = g_hash_table_new_full(g_str_hash,
-                                                g_str_equal, free, free_array);
-                                         g_hash_table_insert($$, $1, $2);}
+PRList : CPal ComplexObject             { $$ = g_hash_table_new_full(g_str_hash,
+                                                        g_str_equal, free, free_array);
+                                          g_hash_table_insert($$, $1, $2); }
                                         /* A lista deve ter pelo menos um elemento, a
                                         cada relação é associada, por via de tabela de hash,
                                         um conjunto de objetos que este engloba (separados
                                         entre si por ','). */
-       | PRList ';' CPal ComplexObject  {g_hash_table_insert($1, $3, $4);
-                                         $$ = $1;}
+       | PRList ';' CPal ComplexObject  { g_hash_table_insert($1, $3, $4);
+                                          $$ = $1; }
                                         /* Os elementos estão separados entre si por ';', de
                                         igual forma, são associado à respectiva relação por meio
                                         de tabela de hash. */
        ;
 
-ComplexObject : CPal                    {$$ = g_array_new(FALSE, FALSE, sizeof(char*));
-                                         $$ = g_array_append_val($$, $1);}
+ComplexObject : CPal                    { $$ = g_array_new(FALSE, FALSE, sizeof(char*));
+                                          $$ = g_array_append_val($$, $1); }
                                         /* O conjunto de elementos destino, deve ter pelo menos
                                         um elemento. */
-              | ComplexObject ',' CPal  {$$ = g_array_append_val($1, $3);}
+              | ComplexObject ',' CPal  { $$ = g_array_append_val($1, $3); }
                                         /* Os objetos estão separados entre si por ','' */
               ;
 
-MetaList : /* Vazio*/                   {;}
+MetaList : /* Vazio*/                   { ; }
                                         /* A lista de metadados pode ser vazia. */
-     | MetaList MetaElem ';'            {;}
+     | MetaList MetaElem ';'            { ; }
                                         /* A lista de metadados é compostamente por
                                         vários elementos terminados por ';'. */
      ;
@@ -158,13 +158,24 @@ MetaElem : Pal Attrib PalList           { if(containsDictionary(meta, $1)) {
                                         /* Um palavra pode ser associada a um outro conjunto
                                         de palavras. Quando surge uma redifição, deve ser lançado
                                         um warning e ignorada a re-definição. */
-         | CPal CPal CPal               {;}
+         | CPal CPal CPal               { int tmp = add_inter_relation(man, $2, $1, $3);
+                                          switch(tmp) {
+                                                  case -1:
+                                                        // Relacao nao existe.
+                                                        break;
+                                                  case 0:
+                                                        // Elementos repetidos.
+                                                        break;
+                                                  default:
+                                                        // Sucesso.
+                                                        break;
+                                          } }
                                         /* Descreve uma relação entre-relações, definição
                                         de relações entre relações repetidas devem ser ignoradas. */
 
          ;
 
-EndingPalList : PalList Paragrafo       {$$ = $1;}
+EndingPalList : PalList Paragrafo       { $$ = $1; }
                                         /* corresponde a um conjunto de palavras terminado por
                                         paragrafo. */
               ;
@@ -200,20 +211,36 @@ void free_array(gpointer data) {
 
 void foreach_par_relacao(gpointer key,
                 gpointer value, gpointer user_data) {
-        char *elem, *relacao = (char*)key, *sujeito = (char*)user_data;
+        char *objeto, *relacao = (char*)key, *sujeito = (char*)user_data;
         GArray *arr = (GArray*)value;
         guint i, size = arr->len;
 
-        //printf("\tpara sujeito |%s|:\n", sujeito);
-        //printf("\t\tpara a relacao |%s|:\n", relacao);
         for(i = 0; i < size; i++) {
-                elem = g_array_index(arr, char*, i);
-                //printf("\t\t\tobjeto |%s|:\n", elem);
+                objeto = g_array_index(arr, char*, i);
+
+                if( add_relation(man, relacao, sujeito, objeto) ) {
+                        // Tudo certo.
+                } else {
+                        // warning, redinificao de uma relação repetida.
+                }
         }
 }
 
 int main(int argc, char **argv)
 {
+        char *dumpdir = strdup("dump");
+        if(argc >= 2) {
+                file = strdup(argv[1]);
+
+                if(argc == 3) {
+                        free(dumpdir);
+                        dumpdir = strdup(argv[2]);
+                }
+        }
+        else {
+                printf("numero invalido de argumentos\n");
+                return 0;
+        }
         // Utilizado para gestão de erros.
         file = strdup(argv[1]);
 
@@ -229,6 +256,14 @@ int main(int argc, char **argv)
 
         yyparse();
 
+        // Depois do parsing,
+        // Aplicar inter-relações
+        printf("before inter relations\n");
+        apply_inter_relations(man);
+        printf("after inter relations\n");
+        // E, despejar o conteudo na diretoria indicada.
+        dump_manager(man, dumpdir);
+
         // Limpar a memoria associada ao programa
         // Libertar o dicionario
         destroyDictionary(meta);
@@ -237,6 +272,7 @@ int main(int argc, char **argv)
         destroy_manager(man);
 
         free(file);
+        free(dumpdir);
 
         return 0;
 }

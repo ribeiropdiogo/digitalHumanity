@@ -29,12 +29,7 @@ int containsTupleSet(TupleSet set, char *key1, char *key2) {
 int insertTupleSet(TupleSet set, char *key1, char *key2) {
         char *code = merge_keys(key1, key2);
 
-        int res = g_hash_table_insert(set->table, code, NULL);
-
-        if(!res)
-                g_free(code);
-
-        return res;
+        return g_hash_table_insert(set->table, code, NULL);
 }
 
 int removeTupleSet(TupleSet set, char *key1, char *key2) {
@@ -71,7 +66,7 @@ char *merge_keys(char *key1, char *key2) {
 
 char *get_keys(char *code, char **ekey1, char **ekey2) {
         char *cp = strdup(code);
-        char *sep = strstr(code, "<->");
+        char *sep = strstr(cp, "<->");
 
         *sep = '\0';
         *ekey1 = cp;

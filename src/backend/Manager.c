@@ -1,4 +1,7 @@
+#include <stdio.h>
 #include "Manager.h"
+
+int contexto;
 
 typedef struct manager {
         /*
@@ -59,6 +62,12 @@ void intreat_foreach(gpointer key, gpointer value,
 void treatment_foreach(gpointer key, gpointer value,
                        gpointer user_data);
 
+void dump_free_rel(gpointer key, gpointer value,
+                   gpointer user_data);
+
+void free_rel_ts_fe(gpointer key, gpointer value,
+                    gpointer user_data);
+
 void synonym_f(TupleSet ts1, TupleSet ts2);
 void inverseof_f(TupleSet ts1, TupleSet ts2);
 void make_inter_relation(Manager man);
@@ -80,11 +89,25 @@ void apply_inter_relations(Manager man) {
         char buff[100];
         memcpy(buff, &(man->free_relations), sizeof(Dictionary));
         memcpy(buff + sizeof(Dictionary), &(man->relation_treatment), sizeof(Dictionary));
+        printf("before foreach\n");
         foreachDictionary(man->inter_relations, treatment_foreach, buff);
+        printf("after foreach\n");
 }
 
 void dump_manager(Manager man, char *dir) {
-        apply_inter_relations(man);
+        printf("A iniciar despejo da informação na diretoria \"%s\".\n", dir);
+        printf("---------------- Dados base:\n");
+        printf("-> Existem %8d descrições.\n", sizeDictionary(man->descriptions));
+        printf("-> Existem %8d titulos.\n", sizeDictionary(man->titles));
+        printf("-> Existem %8d relações livres.\n",
+               sizeDictionary(man->free_relations));
+
+        // Processar todos os titulos e descricoes.
+
+        // Processar todas as relações reservadas.
+
+        // Processar todas as relações livres.
+        foreachDictionary(man->free_relations, dump_free_rel, NULL);
 }
 
 void destroy_manager(Manager man) {
@@ -115,7 +138,7 @@ int add_topic(Manager man, char *topic, char *title, char *description) {
 int add_inter_relation(Manager man, char *relation, char *subject, char *object) {
         // Se relacao nao existe, abortar.
         if(!containsDictionary(man->inter_relations, relation))
-                return 0;
+                return -1;
 
         TupleSet ts = (TupleSet)getValueDictionary(man->inter_relations, relation);
 
@@ -124,6 +147,10 @@ int add_inter_relation(Manager man, char *relation, char *subject, char *object)
 
 int add_relation(Manager man, char *relation, char *subject, char *object) {
         TupleSet ts = NULL;
+
+        relation = strdup(relation);
+        subject = strdup(subject);
+        object = strdup(object);
 
         // se se trata de uma relacao reservada
         if( containsDictionary(man->reserved_relations, relation) ) {
@@ -164,19 +191,31 @@ void intreat_foreach(gpointer key, gpointer value,
         Dictionary free_rel = *(Dictionary*)user_data;
         TreatFunc tf = *(TreatFunc*)(((char*)user_data) + sizeof(Dictionary));
         char *tmp = get_keys(key, &key1, &key2);
+        printf("keys are %s and %s\n", key1, key2);
         TupleSet ts1 = (TupleSet)getValueDictionary(free_rel, key1);
         TupleSet ts2 = (TupleSet)getValueDictionary(free_rel, key2);
-        (*tf)(ts1, ts2);
+        printf("applying function %ld %ld\n", ts1, ts2);
+        if(ts1 && ts2)
+                (*tf)(ts1, ts2);
+        printf("done applying stuff\n");
         free(tmp);
 }
 
 void treatment_foreach(gpointer key, gpointer value,
                        gpointer user_data) {
+        char internalbuff[100];
+        printf("relations is %s\n", (char*)key);
+        printf("getting dictionary rel treat\n");
         Dictionary rel_treat = *(Dictionary*)(((char*)user_data) + sizeof(Dictionary));
+        printf("getting treat func\n");
         TreatFunc tf = (TreatFunc)getValueDictionary(rel_treat, key);
-        memcpy( ((char*)user_data) + sizeof(Dictionary),
+        printf("copying memory\n");
+        memcpy( internalbuff, (char*)user_data, sizeof(Dictionary) );
+        memcpy( ((char*)internalbuff) + sizeof(Dictionary),
                 &tf, sizeof(TreatFunc) );
-        foreachTupleSet((TupleSet)value, intreat_foreach, user_data);
+        printf("before for each tuple\n");
+        foreachTupleSet((TupleSet)value, intreat_foreach, internalbuff);
+        printf("after for each tuple\n");
 }
 
 void synonym_f(TupleSet ts1, TupleSet ts2) {
@@ -213,4 +252,28 @@ void make_reserved_relation(Manager man) {
                          g_strdup("img"), makeTupleSet());
         insertDictionary(man->reserved_relations,
                          g_strdup("attach"), makeTupleSet());
+}
+
+void free_rel_ts_fe(gpointer key, gpointer value,
+                    gpointer user_data) {
+        char *key1, *key2;
+        char *tmp = get_keys(key, &key1, &key2);
+
+        printf("Contexto nº%d, sujeito \"%s\", objeto \"%s\".\n",
+               contexto, key1, key2);
+        contexto++;
+
+        free(tmp);
+}
+
+void dump_free_rel(gpointer key, gpointer value,
+                   gpointer user_data) {
+        char *rel = (char*)key;
+        TupleSet ts = (TupleSet)value;
+        printf("\n---------------- Despejando info sobre \"%s\":\n", rel);
+        printf("relação envolvida em %d contextos.\n", sizeTupleSet(ts));
+
+        // Processar tupleset associado.
+        contexto = 0;
+        foreachTupleSet(ts, free_rel_ts_fe, NULL);
 }
