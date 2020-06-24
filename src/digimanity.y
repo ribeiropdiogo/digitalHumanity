@@ -6,6 +6,7 @@
 #include "Manager.h"
 
 // para evitar warnings.
+extern char *file;
 extern int yylex();
 int yyerror(char*);
 
@@ -15,6 +16,7 @@ void foreach_par_relacao(gpointer key,
 
 // Dados globais do sistema
 Dictionary meta = NULL;
+Manager man = NULL;
 %}
 
 /* Definicao dos dados de yylval*/
@@ -41,29 +43,29 @@ Dictionary meta = NULL;
 %type <table> PRList ParesRelacao
 
 %%
-Digimanity : Meta Caderno                {;}
+Digimanity : Meta Caderno               {;}
            ;
 
-Meta : TitleTab MetaTag MetaList             {;}
-                                         /* Encontrou a meta tag, Por isso,
-                                         processa toda a metalist. */
+Meta : TitleTab MetaTag MetaList        {;}
+                                        /* Encontrou a meta tag, Por isso,
+                                        processa toda a metalist. */
      ;
 
 Caderno : /* Vazio */
-        | Caderno Documento TriplosSec   {;}
+        | Caderno Documento TriplosSec  {;}
         ;
 
-Documento : Conceito Titulo Texto        { printf("#################################\n");
-                                           printf("-> conceito: |%s|, titulo |%s|:\n", $1, g_string_free($2, FALSE));
-                                           printf("%s", g_string_free($3,FALSE));}
+Documento : Conceito Titulo Texto       {add_topic(man, $1,
+                                                        g_string_free($2, FALSE),
+                                                        g_string_free($3, FALSE));}
           ;
 
-Conceito : TitleTab CPal                 { $$ = $2;}
-                                         /* Começou um novo conceito. */
+Conceito : TitleTab CPal                { $$ = $2;}
+                                        /* Começou um novo conceito. */
          ;
 
-Titulo : TituloTag EndingPalList              {$$ = $2;}
-                                         /* Definicao do titulo per si. */
+Titulo : TituloTag EndingPalList        {$$ = $2;}
+                                        /* Definicao do titulo per si. */
        ;
 
 Texto : /* Vazio */                     {$$ = g_string_new(NULL);}
@@ -73,68 +75,68 @@ Texto : /* Vazio */                     {$$ = g_string_new(NULL);}
                                                  g_string_free($2, FALSE));}
       ;
 
-TriplosSec : TriplosTag Triplos      {;}
+TriplosSec : TriplosTag Triplos         {;}
            ;
 
 Triplos : /* Vazio */
-        | Triplos CPal ParesRelacao   {g_hash_table_foreach($3, foreach_par_relacao, $2);
-                                       g_hash_table_destroy($3);}
+        | Triplos CPal ParesRelacao     {g_hash_table_foreach($3, foreach_par_relacao, $2);
+                                         g_hash_table_destroy($3);}
         ;
 
-ParesRelacao : PRList '.'                {$$ = $1;}
+ParesRelacao : PRList '.'               {$$ = $1;}
              ;
 
-PRList : CPal ComplexObject              {$$ = g_hash_table_new_full(g_str_hash,
-                                                        g_str_equal, free, free_array);
-                                          g_hash_table_insert($$, $1, $2);}
-       | PRList ';' CPal ComplexObject   {g_hash_table_insert($1, $3, $4);
-                                          $$ = $1;}
+PRList : CPal ComplexObject             {$$ = g_hash_table_new_full(g_str_hash,
+                                                g_str_equal, free, free_array);
+                                         g_hash_table_insert($$, $1, $2);}
+       | PRList ';' CPal ComplexObject  {g_hash_table_insert($1, $3, $4);
+                                         $$ = $1;}
        ;
 
-ComplexObject : CPal                     {$$ = g_array_new(FALSE, FALSE, sizeof(char*));
-                                          $$ = g_array_append_val($$, $1);}
-              | ComplexObject ',' CPal   {$$ = g_array_append_val($1, $3);}
+ComplexObject : CPal                    {$$ = g_array_new(FALSE, FALSE, sizeof(char*));
+                                         $$ = g_array_append_val($$, $1);}
+              | ComplexObject ',' CPal  {$$ = g_array_append_val($1, $3);}
               ;
 
 MetaList : /* Vazio*/
-     | MetaList MetaElem ';'                     {;}
+     | MetaList MetaElem ';'            {;}
      ;
 
-MetaElem : Pal Attrib PalList                { if(containsDictionary(meta, $1)) {
+MetaElem : Pal Attrib PalList           { if(containsDictionary(meta, $1)) {
                                                  // emitir erro
-                                            } else {
+                                          } else {
                                                 insertDictionary(meta, $1, g_string_free($3, FALSE));
-                                            } }
-                                          /* Associa os metados a respectiva
-                                          palavra. */
-         | CPal CPal CPal                 {;}
+                                          } }
+                                        /* Associa os metados a respectiva
+                                        palavra. */
+         | CPal CPal CPal               {;}
 
          ;
 
-EndingPalList : PalList Paragrafo         {$$ = $1;}
+EndingPalList : PalList Paragrafo       {$$ = $1;}
               ;
 
-PalList : CPal                            { $$ = g_string_new($1); }
-        | PalList CPal                    { $$ = $1;
-                                            g_string_append_printf($$, " %s", $2); }
-                                          /* Adiciona a palavra encontrada ao
-                                          array de palavras existentes. */
+PalList : CPal                          { $$ = g_string_new($1); }
+        | PalList CPal                  { $$ = $1;
+                                          g_string_append_printf($$, " %s", $2); }
+                                        /* Adiciona a palavra encontrada ao
+                                        array de palavras existentes. */
         ;
 
-CPal : Pal                                { $$ = $1; }
-                                          /* Quando encontra uma Pal, entao
-                                          o LHS e simplesmente igual a propria
-                                          palavra encontrada */
-     | Var                                { if(containsDictionary(meta, $1)) {
+CPal : Pal                              { $$ = $1; }
+                                        /* Quando encontra uma Pal, entao
+                                        o LHS e simplesmente igual a propria
+                                        palavra encontrada */
+     | Var                              { if(!containsDictionary(meta, $1)) {
                                                 $$ = "";
                                                 // emitir erro
-                                            } else {
+                                          } else {
                                                 $$ = (char*)getValueDictionary(meta, $1);
-                                            } }
-                                          /* Quando encontra uma Var, deve
-                                          procurar o correspondente valor e
-                                          definir o LHS como sendo o respectivo
-                                          valor desta */
+                                          } }
+                                        /* Quando encontra uma Var, deve
+                                        procurar o correspondente valor e
+                                        definir o LHS como sendo o respectivo
+                                        valor desta */
      ;
 %%
 
@@ -161,15 +163,29 @@ void foreach_par_relacao(gpointer key,
 
 int main(int argc, char **argv)
 {
-      // Inicializa dados globais
-      meta = makeDictionary(NULL);
+        // Utilizado para gestão de erros.
+        file = strdup(argv[1]);
 
-      yyparse();
+        // Ficheiro de input atual.
+        yyin = fopen(argv[1], "r");
 
-      // Limpar a memoria associada ao programa
+        // Inicializa dados globais
+        // Inicializa dicionario de metadados.
+        meta = makeDictionary(NULL);
 
-      // Libertar o dicionario
-      destroyDictionary(meta);
+        // Inicializa manage principal.
+        man = init_manager();
 
-	return 0;
+        yyparse();
+
+        // Limpar a memoria associada ao programa
+        // Libertar o dicionario
+        destroyDictionary(meta);
+
+        // Liberta o manager
+        destroy_manager(man);
+
+        free(file);
+
+        return 0;
 }

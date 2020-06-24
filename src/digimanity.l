@@ -5,7 +5,7 @@
 #define YY_USER_ACTION (tokenpos = tokenpos + yyleng);
 
 int lineno = 1, tokenpos = 0;
-char auxbuff[500];
+char auxbuff[500], *file="";
 
 %}
 
@@ -16,65 +16,67 @@ char auxbuff[500];
 wd  [a-zA-Z0-9.]+
 sp [ \t]
 %%
-<META>\<\-                     { return Attrib;}
-<TRIPLOS>[.;,]                  {return yytext[0];}
-<META>[;]                       { return yytext[0];}
-<INITIAL>(\n)+                           {return Paragrafo;}
+<META>\<\-              { return Attrib; }
+<TRIPLOS>[.;,]          { return yytext[0]; }
+<META>[;]               { return yytext[0]; }
+<INITIAL>(\n)+          { lineno += strlen(yytext);
+                          return Paragrafo; }
 
-\n.*                             { tokenpos = 0;
-                                  strcpy(auxbuff, yytext + 1);
-                                  lineno++;
-                                  yyless(1); }
+\n.*                    { tokenpos = 0;
+                          strcpy(auxbuff, yytext + 1);
+                          lineno++;
+                          yyless(1); }
 
-{sp}                       { ; }
-                                /* Ignora qualquer espaco */
+{sp}                    { ; }
+                        /* Ignora qualquer espaco */
 
-^{sp}*#[^\n]*\n            { ; }
-                                /* Linhas a comecar com hash sign sao ignoradas
-                                na totalidade, garantindo assim que podem ser
-                                utilizadas como comentarios. */
+^{sp}*#[^\n]*\n         { lineno++; }
+                        /* Linhas a comecar com hash sign sao ignoradas
+                        na totalidade, garantindo assim que podem ser
+                        utilizadas como comentarios. */
 
-=+                             {  BEGIN(0);
-                                  yylval.count = yyleng;
-                                  return TitleTab; }
-                                /* Guarda o numero de carateres '=' encontrados. */
+=+                      { BEGIN(0);
+                          yylval.count = yyleng;
+                          return TitleTab; }
+                        /* Guarda o numero de carateres '=' encontrados. */
 
-(?i:meta)                       { BEGIN(META); return MetaTag; }
+(?i:meta)               { BEGIN(META);
+                          return MetaTag; }
 
-@tit{sp}*:                 { return TituloTag; }
+@tit{sp}*:              { return TituloTag; }
 
-@triplos{sp}*:             { BEGIN(TRIPLOS);
-                             return TriplosTag; }
+@triplos{sp}*:          { BEGIN(TRIPLOS);
+                          return TriplosTag; }
 
-\{%{wd}%\}                      { yytext[yyleng - 2] = '\0';
-                                  yylval.word = strdup(yytext + 2);
-                                  return Var; }
-                                /* Define uma palavra complexa,
-                                no respectivo campo fica so associado
-                                a palavra em si, retirando as chavetas e % */
+\{%{wd}%\}              { yytext[yyleng - 2] = '\0';
+                          yylval.word = strdup(yytext + 2);
+                          return Var; }
+                        /* Define uma palavra complexa,
+                        no respectivo campo fica so associado
+                        a palavra em si, retirando as chavetas e % */
 
-\"[^\"\n]*\"                    { yytext[yyleng - 1] = '\0';
-                                  yylval.word = strdup(yytext + 1);
-                                  return Pal; }
-                                /* Palavras entre aspas são literais, pelo
-                                que qualquer elemento dentro e ignorado. */
+\"[^\"\n]*\"            { yytext[yyleng - 1] = '\0';
+                          yylval.word = strdup(yytext + 1);
+                          return Pal; }
+                        /* Palavras entre aspas são literais, pelo
+                        que qualquer elemento dentro e ignorado. */
 
-<TRIPLOS>[^ =\n,;.]+          {   yylval.word = strdup(yytext);
-                                  return Pal; }
-                                /* Uma palavra representa qualquer outro
-                                conjunto de 1 ou + carateres que nao sejam
-                                um espaco de qualquer tipo */
-<INITIAL>[^ =\n]+          {yylval.word = strdup(yytext);
-                                  return Pal; }
-                                /* Uma palavra representa qualquer outro
-                                conjunto de 1 ou + carateres que nao sejam
-                                um espaco de qualquer tipo */
-<META>[^ =\n;]+          {yylval.word = strdup(yytext);
-                                  return Pal; }
-                                /* Uma palavra representa qualquer outro
-                                conjunto de 1 ou + carateres que nao sejam
-                                um espaco de qualquer tipo */
-.                              {return yytext[0];}
+<TRIPLOS>[^ =\n,;.]+    { yylval.word = strdup(yytext);
+                          return Pal; }
+                        /* Uma palavra representa qualquer outro
+                        conjunto de 1 ou + carateres que nao sejam
+                        um espaco de qualquer tipo */
+<INITIAL>[^ =\n]+       { yylval.word = strdup(yytext);
+                          return Pal; }
+                        /* Uma palavra representa qualquer outro
+                        conjunto de 1 ou + carateres que nao sejam
+                        um espaco de qualquer tipo */
+<META>[^ =\n;]+         { yylval.word = strdup(yytext);
+                          return Pal; }
+                        /* Uma palavra representa qualquer outro
+                        conjunto de 1 ou + carateres que nao sejam
+                        um espaco de qualquer tipo */
+.                       { return yytext[0]; }
 %%
 
 char *char_repeat(int n, char k) {
@@ -96,8 +98,8 @@ int yyerror(char *s)
         int i;
         char *buff = char_repeat(yyleng, '^');
 
-	fprintf(stderr, "%d: %s:\n%s\n",
-                yylineno, s, auxbuff);
+	fprintf(stderr, "%s:%d: %s:\n%s\n",
+                file, lineno, s, auxbuff);
 
         fprintf(stderr, "%*s\n", tokenpos, buff);
 
