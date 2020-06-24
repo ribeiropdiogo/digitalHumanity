@@ -2,10 +2,25 @@
 #include <gmodule.h>
 #include "y.tab.h"
 
+/* Ação predifinida antes de qualquer token. Visa incrementar a posição
+atual dentro do buffer a ser processado, para poder indicar este no
+processamento de errros. */
 #define YY_USER_ACTION (tokenpos = tokenpos + yyleng);
 
-int lineno = 1, tokenpos = 0;
-char auxbuff[500], *file="";
+/* Armazena a linha atual a ser processada. */
+int lineno = 1;
+
+/* Armazena, dentro da linha a ser processada, a posição deste. Para que
+depois de possa apontar, ao certo a posição onde sucedeu um erro. */
+int tokenpos = 0;
+
+/* Armazena o conteudo da linha a ser atualmente processada. Para que depois
+se possa realizar um print da linha onde surgiu um erro. */
+char auxbuff[500];
+
+/* Ficheiro a ser atualmente processado, este variavel é estabelecida como
+variavel externa no segmento main do yacc. */
+char *file="";
 
 %}
 
@@ -106,6 +121,8 @@ sp [ \t]
                         /* Qualquer outro carater deve ser retornado como tal */
 %%
 
+/* Objetivo de definir um conjunto de carateres, todos iguais, com um certo
+tamanho.*/
 char *char_repeat(int n, char k) {
         int i;
         char *dest = malloc(sizeof(char) * (n + 1));
@@ -119,14 +136,16 @@ char *char_repeat(int n, char k) {
         return dest;
 }
 
+/* Função de error utilizada, imprime o ficheiro, linha e posição, onde surge o
+erro. */
 int yyerror(char *s)
 {
         fprintf(stderr, "text is %s, length is %d\n", yytext, yyleng);
         int i;
         char *buff = char_repeat(yyleng, '^');
 
-	fprintf(stderr, "%s:%d: %s:\n%s\n",
-                file, lineno, s, auxbuff);
+	fprintf(stderr, "%s:%d:%d: %s:\n%s\n",
+                file, lineno, tokenpos, s, auxbuff);
 
         fprintf(stderr, "%*s\n", tokenpos, buff);
 
