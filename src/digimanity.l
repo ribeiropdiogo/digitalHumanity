@@ -17,66 +17,93 @@ wd  [a-zA-Z0-9.]+
 sp [ \t]
 %%
 <META>\<\-              { return Attrib; }
+                        /* token de atribuição, dentro do estado META. */
+
 <TRIPLOS>[.;,]          { return yytext[0]; }
+                        /* No estado TRIPLOS, os carateres indicados tem um
+                        significado especifico (e bem definido) pelo que devem
+                        ser explicitamente retornados. */
+
 <META>[;]               { return yytext[0]; }
+                        /* No estado META, o carate ';' tem um significado
+                        especifico (e bem definido) pelo que deve ser sinalizado. */
+
 <INITIAL>(\n)+          { lineno += strlen(yytext);
                           return Paragrafo; }
+                        /* Define-se um paragrafo como sendo um conjunto de
+                        newlines seguidos. O número de linhas deve ser conta-
+                        bilizado. Só surge no estado INITIAL, pois nos outros
+                        não há noção de paragrafos. */
 
 \n.*                    { tokenpos = 0;
                           strcpy(auxbuff, yytext + 1);
                           lineno++;
                           yyless(1); }
+                        /* É armazenado um buffer em memória, contendo todos
+                        os elementos a linha a ser atualmente processada. Este
+                        mecanismo permite uma maior facilidade para gestão de
+                        erros. */
 
 {sp}                    { ; }
                         /* Ignora qualquer espaco */
 
 ^{sp}*#[^\n]*\n         { lineno++; }
-                        /* Linhas a comecar com hash sign sao ignoradas
-                        na totalidade, garantindo assim que podem ser
-                        utilizadas como comentarios. */
+                        /* Linhas a começar com zero ou mais espaços em branco,
+                        seguidas de um '#' são consideradas comentários, pelo
+                        que são totalmente ignoradas pelo analisador léxico. */
 
 =+                      { BEGIN(0);
                           yylval.count = yyleng;
                           return TitleTab; }
-                        /* Guarda o numero de carateres '=' encontrados. */
+                        /* Se foi encontrado um conjunto de sinais '=', então
+                        o analisador léxico retorna ao estado INITIAL. Conta-
+                        bilizando todos os elementos necessários. */
 
 (?i:meta)               { BEGIN(META);
                           return MetaTag; }
+                        /* Se a tag, independente de caps lock, foi encontrada
+                        assume-se que estamos a trabalhar no estado de META,
+                        fornecendo o respectivo token. */
 
 @tit{sp}*:              { return TituloTag; }
+                        /* Formatação tipo da formatação de titulos, a tag '@tit'
+                        seguida de espaços com um carater ':' no fim. */
 
 @triplos{sp}*:          { BEGIN(TRIPLOS);
                           return TriplosTag; }
+                        /* Semelhante à tag de titulo, passa ao estado TRIPLOS
+                        pelo que certos carateres ganham significados explicitos. */
 
 \{%{wd}%\}              { yytext[yyleng - 2] = '\0';
                           yylval.word = strdup(yytext + 2);
                           return Var; }
-                        /* Define uma palavra complexa,
-                        no respectivo campo fica so associado
-                        a palavra em si, retirando as chavetas e % */
+                        /* Define a tipicidade de uma variavel, pelo que esta
+                        é transmitida ao yacc na sua forma passe (sem os delimitadores). */
 
 \"[^\"\n]*\"            { yytext[yyleng - 1] = '\0';
                           yylval.word = strdup(yytext + 1);
                           return Pal; }
-                        /* Palavras entre aspas são literais, pelo
-                        que qualquer elemento dentro e ignorado. */
+                        /* Palavras delimitadas por aspas, são consideradas como
+                        literais. */
 
-<TRIPLOS>[^ =\n,;.]+    { yylval.word = strdup(yytext);
+<TRIPLOS>[^ \t=\n,;.]+  { yylval.word = strdup(yytext);
                           return Pal; }
-                        /* Uma palavra representa qualquer outro
-                        conjunto de 1 ou + carateres que nao sejam
-                        um espaco de qualquer tipo */
-<INITIAL>[^ =\n]+       { yylval.word = strdup(yytext);
+                        /* Uma palavra define-se como um conjunto de carateres,
+                        sem espaços intermédios, e sem carateres de significado
+                        explicito, no estado TRIPLOS. */
+
+<INITIAL>[^ \t=\n]+     { yylval.word = strdup(yytext);
                           return Pal; }
-                        /* Uma palavra representa qualquer outro
-                        conjunto de 1 ou + carateres que nao sejam
-                        um espaco de qualquer tipo */
-<META>[^ =\n;]+         { yylval.word = strdup(yytext);
+                        /* Semelhante à produção acima, contabilizando carateres
+                        de significado explicito distintos. */
+
+<META>[^ \t=\n;]+       { yylval.word = strdup(yytext);
                           return Pal; }
-                        /* Uma palavra representa qualquer outro
-                        conjunto de 1 ou + carateres que nao sejam
-                        um espaco de qualquer tipo */
+                        /* Semelhante à produção acima, contabilizando carateres
+                        de significado explicito distintos. */
+
 .                       { return yytext[0]; }
+                        /* Qualquer outro carater deve ser retornado como tal */
 %%
 
 char *char_repeat(int n, char k) {
