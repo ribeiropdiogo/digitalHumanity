@@ -59,7 +59,7 @@ char *image_displayer(GArray* array) {
         if( array->len == 1 ) {
                 elem = g_array_index(array, char*, 0);
                 g_string_append_printf(str,
-                                       "<img src=\"%s\" style=\"width:60%\" class=\"center\"/>\n",
+                                       "<img src=\"%s\" style=\"width:60%%\" class=\"center\"/>\n",
                                        elem);
         } else if( array->len > 1) {
                 g_string_append_printf(str,
@@ -71,7 +71,7 @@ char *image_displayer(GArray* array) {
                         g_string_append_printf(str, "<div class=\"mySlides fade\">\n");
 
                         g_string_append_printf(str,
-                                               "<img src=\"images/%s\" style=\"width:60%\" class=\"center\">\n", elem);
+                                               "<img src=\"images/%s\" style=\"width:60%%\" class=\"center\">\n", elem);
 
                         g_string_append_printf(str, "</div>\n");
                 }
@@ -80,7 +80,7 @@ char *image_displayer(GArray* array) {
                                        "<a class=\"prev\" onclick=\"plusSlides(-1)\">&#10094;</a>");
 
                 g_string_append_printf(str,
-                                       "<a class=\"next\" onclick=\"plusSlides(1)\">&#10095;</a>")
+                                       "<a class=\"next\" onclick=\"plusSlides(1)\">&#10095;</a>");
 
                 g_string_append_printf(str,
                                        "</div>\n\n");
@@ -161,7 +161,7 @@ char *index_intro() {
         GString *str = g_string_new(NULL);
 
         g_string_append_printf(str, "<h2 class=\"section__title\">Digital Humanity</h2>\n");
-        g_string_append_printf(str, "<img src=\"images/world.jpg\" class=\"center\" style=\"width:50%\"/>\n");
+        g_string_append_printf(str, "<img src=\"images/world.jpg\" class=\"center\" style=\"width:50%%\"/>\n");
         g_string_append_printf(str, "<p>O projeto <i>Digimanity</i> surge no âmbito da unidade curricular de Processamento de Linguagens, na tentativa de emular o comportamento de automatização de criação de enciclopédias de forma a permitir a ágil catalogação de diferentes elementos, de distintas classes.</p>\n");
         g_string_append_printf(str, "<p>Isto utiliza uma língua de domínio especifico para geração de sites HTML para representar notebooks em notação simplificada de <i>turtle</i>.</p>\n");
         g_string_append_printf(str, "<h2 class=\"section__title\">Como Utilizar</h2>\n");

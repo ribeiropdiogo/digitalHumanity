@@ -258,9 +258,8 @@ int main(int argc, char **argv)
 
         // Depois do parsing,
         // Aplicar inter-relações
-        printf("before inter relations\n");
         apply_inter_relations(man);
-        printf("after inter relations\n");
+
         // E, despejar o conteudo na diretoria indicada.
         dump_manager(man, dumpdir);
 
