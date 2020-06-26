@@ -28,7 +28,7 @@ p {
 
 a, a:hover {
   text-decoration: none;
-  color: var(--primary-color);
+  color: #037bfc;
 }
 
 hr {
