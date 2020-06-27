@@ -12,7 +12,9 @@ Manager init_manager();
 void apply_inter_relations(Manager man);
 void dump_manager(Manager man, char *dir);
 void destroy_manager(Manager man);
-int add_topic(Manager man, char *topic, char *title, char *description);
+void add_reference(Manager man, char *topic);
+void add_title(Manager man, char *topic, char *title);
+void add_description(Manager man, char *topic, char *description);
 int add_inter_relation(Manager man, char *relation, char *subject, char *object);
 int add_relation(Manager man, char *relation, char *subject, char *object);
 

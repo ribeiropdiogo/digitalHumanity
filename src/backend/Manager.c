@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include "Manager.h"
+#include "html_converter.h"
 
 int contexto;
+char *maindir;
 
 typedef struct manager {
         /*
@@ -18,6 +20,8 @@ typedef struct manager {
            contem valores do tipo `char *`.
          */
         Dictionary titles;
+
+        Dictionary reference;
 
         /*
            Associa a cada relação de inter-relações, a
@@ -68,16 +72,32 @@ void dump_free_rel(gpointer key, gpointer value,
 void free_rel_ts_fe(gpointer key, gpointer value,
                     gpointer user_data);
 
+void foreach_escrita_file(gpointer key, gpointer value,
+                          gpointer user_data);
+
 void synonym_f(TupleSet ts1, TupleSet ts2);
 void inverseof_f(TupleSet ts1, TupleSet ts2);
 void make_inter_relation(Manager man);
 void make_reserved_relation(Manager man);
+char *make_side_bar(Dictionary dict);
+
+Dictionary getAllCodeInfo(Manager man);
+void processa_titulos(Dictionary dict, Manager man);
+void processa_imagens(Dictionary dict, Manager man);
+void processa_descricao(Dictionary dict, Manager man);
+void processa_relacoes(Dictionary dict, Manager man);
+void processa_anexos(Dictionary dict, Manager man);
+void dict_append_info(Dictionary dict, char *topic,
+                      char *format);
+void escrever_ficheiro(char *nome, char *sidebar, char *info);
+void dump_file(Manager man, char *dir);
 
 Manager init_manager() {
         Manager man = malloc(sizeof(struct manager));
         man->descriptions = makeDictionary(free);
         man->titles = makeDictionary(free);
         man->free_relations = makeDictionary(destroyTupleSet);
+        man->reference = makeDictionary(free);
 
         make_inter_relation(man);
         make_reserved_relation(man);
@@ -92,45 +112,26 @@ void apply_inter_relations(Manager man) {
         foreachDictionary(man->inter_relations, treatment_foreach, buff);
 }
 
-void dump_manager(Manager man, char *dir) {
-        printf("A iniciar despejo da informação na diretoria \"%s\".\n", dir);
-        printf("---------------- Dados base:\n");
-        printf("-> Existem %8d descrições.\n", sizeDictionary(man->descriptions));
-        printf("-> Existem %8d titulos.\n", sizeDictionary(man->titles));
-        printf("-> Existem %8d relações livres.\n",
-               sizeDictionary(man->free_relations));
-
-        // Processar todos os titulos e descricoes.
-
-        // Processar todas as relações reservadas.
-
-        // Processar todas as relações livres.
-        foreachDictionary(man->free_relations, dump_free_rel, NULL);
-}
-
 void destroy_manager(Manager man) {
         destroyDictionary(man->descriptions);
         destroyDictionary(man->titles);
+        destroyDictionary(man->reference);
         destroyDictionary(man->free_relations);
         destroyDictionary(man->relation_treatment);
         destroyDictionary(man->inter_relations);
         destroyDictionary(man->reserved_relations);
 }
 
-int add_topic(Manager man, char *topic, char *title, char *description) {
-        int res = 1;
+void add_reference(Manager man, char *topic) {
+        insertDictionary(man->reference, topic, NULL);
+}
 
-        if(containsDictionary(man->descriptions, topic)
-           || containsDictionary(man->titles, topic))
-                return 0;
-
-        // Insere o titulo
+void add_title(Manager man, char *topic, char *title) {
         insertDictionary(man->titles, topic, title);
+}
 
-        // Insere a descricao
+void add_description(Manager man, char *topic, char *description) {
         insertDictionary(man->descriptions, topic, description);
-
-        return res;
 }
 
 int add_inter_relation(Manager man, char *relation, char *subject, char *object) {
@@ -272,4 +273,116 @@ void dump_free_rel(gpointer key, gpointer value,
         // Processar tupleset associado.
         contexto = 0;
         foreachTupleSet(ts, free_rel_ts_fe, NULL);
+}
+
+
+void dump_manager(Manager man, char *dir) {
+        char folder[1000];
+        sprintf(folder, "cp -r ../html-template %s", dir);
+        int x = system(folder);
+        printf("A iniciar despejo da informação na diretoria \"%s\".\n", dir);
+        printf("---------------- Dados base:\n");
+        printf("-> Existem %8d descrições.\n", sizeDictionary(man->descriptions));
+        printf("-> Existem %8d titulos.\n", sizeDictionary(man->titles));
+        printf("-> Existem %8d relações livres.\n",
+               sizeDictionary(man->free_relations));
+
+        maindir = dir;
+        Dictionary dict = makeDictionary(free);
+        char *sidebar, nm[1000];
+        sprintf(nm, "%s/index.html", maindir);
+
+        processa_titulos(dict, man);
+        processa_imagens(dict, man);
+        processa_descricao(dict, man);
+        processa_relacoes(dict, man);
+        processa_anexos(dict, man);
+
+        sidebar = make_side_bar(dict);
+
+        printf("coisas\n");
+
+        escrever_ficheiro(nm, sidebar, NULL);
+
+        printf("after\n");
+
+        foreachDictionary(dict,
+                          foreach_escrita_file, sidebar);
+
+        destroyDictionary(dict);
+}
+
+void processa_titulos(Dictionary dict, Manager man) {
+
+}
+
+void processa_imagens(Dictionary dict, Manager man) {
+
+}
+
+void processa_descricao(Dictionary dict, Manager man) {
+
+}
+
+void processa_relacoes(Dictionary dict, Manager man) {
+
+}
+
+void processa_anexos(Dictionary dict, Manager man) {
+
+}
+
+void dict_append_info(Dictionary dict, char *topic,
+                      char *format) {
+        GString *buff = (GString*)getValueDictionary(dict, topic);
+        int empty = !buff;
+
+        if( empty ) {
+                buff = g_string_new(NULL);
+        }
+
+        g_string_append(buff, format);
+
+        if(empty) {
+                insertDictionary(dict, topic, buff);
+        }
+}
+
+void escrever_ficheiro(char *nome, char *sidebar, char *info) {
+        FILE *fp = fopen(nome, "w+");
+
+        printf("before files\n");
+
+        char *head = file_heading(),
+             *middle = file_middle(),
+             *minfo = info ? info : index_intro(),
+             *end = file_ending();
+
+        printf("after files\n");
+
+        printf("depois do ola\n");
+        fprintf(fp, "%s%s%s%s%s", head,
+                sidebar, middle, minfo, end);
+
+        printf("after write");
+
+        fclose(fp);
+
+        free(head);
+        free(sidebar);
+        free(middle);
+        free(minfo);
+        free(end);
+}
+
+char *make_side_bar(Dictionary dict) {
+        return strdup("");
+}
+
+void foreach_escrita_file(gpointer key, gpointer value,
+                          gpointer user_data) {
+        char nome[1000], *sidebar = (char*)user_data;
+        sprintf(nome, "%s/files/%s.html",
+                maindir, (char*)key);
+        escrever_ficheiro(nome, sidebar, (char*)value);
 }

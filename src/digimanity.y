@@ -70,9 +70,8 @@ Caderno : /* Vazio */
                                         e a sua respectiva secção de triplos. */
         ;
 
-Documento : Conceito Titulo Texto       { add_topic(man, $1,
-                                                        g_string_free($2, FALSE),
-                                                        g_string_free($3, FALSE)); }
+Documento : Conceito Titulo Texto       { add_title(man, $1, g_string_free($2, FALSE));
+                                          add_description(man, $1, g_string_free($3, FALSE)); }
                                         /* Um documento é um triplo de <conceito, titulo, texto>
                                         pelo que apos processado, é adicionado na estrutura principal.
                                         O texto corresponde a um texto semi-processado em HTML, separando
@@ -228,7 +227,7 @@ void foreach_par_relacao(gpointer key,
 
 int main(int argc, char **argv)
 {
-        char *dumpdir = strdup("dump");
+        char *dumpdir = strdup("dump"), buff[1000];
         if(argc >= 2) {
                 file = strdup(argv[1]);
 
@@ -269,6 +268,10 @@ int main(int argc, char **argv)
 
         // Liberta o manager
         destroy_manager(man);
+
+        sprintf(buff, "cp %s %s/source.caderno", file, dumpdir);
+        int x = system(buff);
+
 
         free(file);
         free(dumpdir);
