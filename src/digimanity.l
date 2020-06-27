@@ -50,6 +50,12 @@ sp [ \t]
                         bilizado. Só surge no estado INITIAL, pois nos outros
                         não há noção de paragrafos. */
 
+{sp}*#[^\n]*\n         { lineno++; }
+                        /* Linhas a começar com zero ou mais espaços em branco,
+                        seguidas de um '#' são consideradas comentários, pelo
+                        que são totalmente ignoradas pelo analisador léxico. */
+
+
 \n.*                    { tokenpos = 0;
                           strcpy(auxbuff, yytext + 1);
                           lineno++;
@@ -61,11 +67,6 @@ sp [ \t]
 
 {sp}                    { ; }
                         /* Ignora qualquer espaco */
-
-^{sp}*#[^\n]*\n         { lineno++; }
-                        /* Linhas a começar com zero ou mais espaços em branco,
-                        seguidas de um '#' são consideradas comentários, pelo
-                        que são totalmente ignoradas pelo analisador léxico. */
 
 =+                      { BEGIN(0);
                           yylval.count = yyleng;

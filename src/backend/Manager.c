@@ -255,8 +255,9 @@ void free_rel_ts_fe(gpointer key, gpointer value,
                     gpointer user_data) {
         char *key1, *key2;
         char *tmp = get_keys(key, &key1, &key2);
+        Dictionary dict = (Dictionary)user_data;
 
-//        printf("Contexto nº%d, sujeito \"%s\", objeto \"%s\".\n", contexto, key1, key2);
+        printf("Contexto nº%d, sujeito \"%s\", objeto \"%s\".\n", contexto, key1, key2);
 
         contexto++;
 
@@ -267,12 +268,13 @@ void dump_free_rel(gpointer key, gpointer value,
                    gpointer user_data) {
         char *rel = (char*)key;
         TupleSet ts = (TupleSet)value;
-//        printf("\n---------------- Despejando info sobre \"%s\":\n", rel);
-//        printf("relação envolvida em %d contextos.\n", sizeTupleSet(ts));
+        Dictionary dict = (Dictionary)user_data;
+        printf("\n---------------- Despejando info sobre \"%s\":\n", rel);
+        printf("relação envolvida em %d contextos.\n", sizeTupleSet(ts));
 
         // Processar tupleset associado.
         contexto = 0;
-        foreachTupleSet(ts, free_rel_ts_fe, NULL);
+        foreachTupleSet(ts, free_rel_ts_fe, dict);
 }
 
 
@@ -300,11 +302,7 @@ void dump_manager(Manager man, char *dir) {
 
         sidebar = make_side_bar(dict);
 
-        printf("coisas\n");
-
         escrever_ficheiro(nm, sidebar, NULL);
-
-        printf("after\n");
 
         foreachDictionary(dict,
                           foreach_escrita_file, sidebar);
@@ -325,6 +323,7 @@ void processa_descricao(Dictionary dict, Manager man) {
 }
 
 void processa_relacoes(Dictionary dict, Manager man) {
+        foreachDictionary(man->free_relations, dump_free_rel, dict);
 
 }
 
@@ -351,20 +350,13 @@ void dict_append_info(Dictionary dict, char *topic,
 void escrever_ficheiro(char *nome, char *sidebar, char *info) {
         FILE *fp = fopen(nome, "w+");
 
-        printf("before files\n");
-
         char *head = file_heading(),
              *middle = file_middle(),
              *minfo = info ? info : index_intro(),
              *end = file_ending();
 
-        printf("after files\n");
-
-        printf("depois do ola\n");
         fprintf(fp, "%s%s%s%s%s", head,
                 sidebar, middle, minfo, end);
-
-        printf("after write");
 
         fclose(fp);
 
