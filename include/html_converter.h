@@ -3,8 +3,9 @@
 
 #include <glib.h>
 
+char *adiciona_titulo(char *title);
 char *add_attachments(GArray *array);
-char *sidebar_info(GArray *array, char *curr);
+char *sidebar_info(GArray *array);
 char *image_displayer(GArray* array);
 char *file_heading();
 char *file_middle();

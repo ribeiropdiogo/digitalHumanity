@@ -1,5 +1,14 @@
 #include "html_converter.h"
 
+char *adiciona_titulo(char *title) {
+        GString *str = g_string_new(NULL);
+
+        g_string_append_printf(str,
+                               "<h2 class=\"section__title\">%s</h2>\n", title);
+
+        return g_string_free(str, FALSE);
+}
+
 char *add_attachments(GArray *array) {
         int i;
         char *elem;
@@ -9,22 +18,18 @@ char *add_attachments(GArray *array) {
                 g_string_append_printf( str,
                                         "<h2 class=\"section__title\">Anexos</h2>");
 
-                g_string_append_printf(str, "<ul>\n");
-
                 for(i = 0; i < array->len; i++) {
                         elem = g_array_index(array, char*, i);
                         g_string_append_printf(str,
                                                "<li><a href=\"%s\">%s</a></li>\n"
                                                , elem, elem);
                 }
-
-                g_string_append_printf(str, "</ul>\n");
         }
 
         return g_string_free(str, FALSE);
 }
 
-char *sidebar_info(GArray *array, char *curr) {
+char *sidebar_info(GArray *array) {
         int i;
         char *elem;
         GString *str = g_string_new(NULL);
@@ -34,12 +39,13 @@ char *sidebar_info(GArray *array, char *curr) {
                                        "<aside class=\"doc__nav\">\n");
 
                 g_string_append_printf(str, "<ul>\n");
+                g_string_append_printf(str, "<h3 class=\"section__title\">Conceitos</h3>\n");
 
                 for(i = 0; i < array->len; i++) {
                         elem = g_array_index(array, char*, i);
                         g_string_append_printf(str,
-                                               "<li class=\"js-btn %s\"><a href=\"%s.html\">%s</a></li>\n",
-                                               (!curr || strcmp(elem,curr)) ? "" : "selected", elem, elem);
+                                               "<a href=\"%s.html\"><li class=\"js-btn\">%s</li></a>\n",
+                                               elem, elem);
                 }
 
                 g_string_append_printf(str, "</ul>\n");
@@ -59,7 +65,7 @@ char *image_displayer(GArray* array) {
         if( array->len == 1 ) {
                 elem = g_array_index(array, char*, 0);
                 g_string_append_printf(str,
-                                       "<img src=\"%s\" style=\"width:60%%\" class=\"center\"/>\n",
+                                       "<img src=\"images/%s\" style=\"height:300px\" class=\"center\"/>\n",
                                        elem);
         } else if( array->len > 1) {
                 g_string_append_printf(str,
@@ -71,7 +77,7 @@ char *image_displayer(GArray* array) {
                         g_string_append_printf(str, "<div class=\"mySlides fade\">\n");
 
                         g_string_append_printf(str,
-                                               "<img src=\"images/%s\" style=\"width:60%%\" class=\"center\">\n", elem);
+                                               "<img src=\"images/%s\" style=\"height:300px\" class=\"center\">\n", elem);
 
                         g_string_append_printf(str, "</div>\n");
                 }

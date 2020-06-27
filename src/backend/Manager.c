@@ -4,6 +4,7 @@
 
 int contexto;
 char *maindir;
+Dictionary tmp;
 
 typedef struct manager {
         /*
@@ -75,6 +76,24 @@ void free_rel_ts_fe(gpointer key, gpointer value,
 void foreach_escrita_file(gpointer key, gpointer value,
                           gpointer user_data);
 
+void foreach_add_to_arr(gpointer key, gpointer value,
+                        gpointer user_data);
+
+void add_titus_fe(gpointer key, gpointer value,
+                  gpointer user_data);
+
+void add_desks_fe(gpointer key, gpointer value,
+                  gpointer user_data);
+
+void fe_images(gpointer key, gpointer value,
+               gpointer user_data);
+
+void fe_add_images(gpointer key, gpointer value,
+                   gpointer user_data);
+
+void fe_add_anexs(gpointer key, gpointer value,
+                  gpointer user_data);
+
 void synonym_f(TupleSet ts1, TupleSet ts2);
 void inverseof_f(TupleSet ts1, TupleSet ts2);
 void make_inter_relation(Manager man);
@@ -89,10 +108,18 @@ void processa_relacoes(Dictionary dict, Manager man);
 void processa_anexos(Dictionary dict, Manager man);
 void dict_append_info(Dictionary dict, char *topic,
                       char *format);
+
 void escrever_ficheiro(char *nome, char *sidebar, char *info);
 void dump_file(Manager man, char *dir);
 
-Manager init_manager() {
+Manager init_manager(char *dir) {
+        char folder[1000];
+        maindir = dir;
+
+        sprintf(folder, "cp -r /usr/local/lib/html-template %s", maindir);
+        int x = system(folder);
+
+        maindir = dir;
         Manager man = malloc(sizeof(struct manager));
         man->descriptions = makeDictionary(free);
         man->titles = makeDictionary(free);
@@ -115,7 +142,6 @@ void apply_inter_relations(Manager man) {
 void destroy_manager(Manager man) {
         destroyDictionary(man->descriptions);
         destroyDictionary(man->titles);
-        destroyDictionary(man->reference);
         destroyDictionary(man->free_relations);
         destroyDictionary(man->relation_treatment);
         destroyDictionary(man->inter_relations);
@@ -131,6 +157,7 @@ void add_title(Manager man, char *topic, char *title) {
 }
 
 void add_description(Manager man, char *topic, char *description) {
+        insertDictionary(man->reference, strdup(topic), g_string_new(NULL));
         insertDictionary(man->descriptions, topic, description);
 }
 
@@ -145,6 +172,7 @@ int add_inter_relation(Manager man, char *relation, char *subject, char *object)
 }
 
 int add_relation(Manager man, char *relation, char *subject, char *object) {
+        char buff[1000];
         TupleSet ts = NULL;
 
         relation = strdup(relation);
@@ -154,8 +182,18 @@ int add_relation(Manager man, char *relation, char *subject, char *object) {
         // se se trata de uma relacao reservada
         if( containsDictionary(man->reserved_relations, relation) ) {
                 ts = (TupleSet)getValueDictionary(man->reserved_relations, relation);
-        } else
+                if( !strcmp(relation,"img") ) {
+                        sprintf(buff, "cp %s %s/images/", object, maindir);
+                }
+                else {
+                        sprintf(buff, "cp %s %s/", object, maindir);
+                }
+                int x = system(buff);
+        } else {
                 ts = (TupleSet)getValueDictionary(man->free_relations, relation);
+                insertDictionary(man->reference, strdup(subject), g_string_new(NULL));
+                insertDictionary(man->reference, strdup(object), g_string_new(NULL));
+        }
 
         // Se nao existe
         if(!ts) {
@@ -253,82 +291,95 @@ void make_reserved_relation(Manager man) {
 
 void free_rel_ts_fe(gpointer key, gpointer value,
                     gpointer user_data) {
-        char *key1, *key2;
-        char *tmp = get_keys(key, &key1, &key2);
+        char *sujeito, *objeto,buff[2000];
+        char *keys = get_keys(key, &sujeito, &objeto);
+        char *relacao = (char*)user_data;
         Dictionary dict = (Dictionary)user_data;
 
-        printf("Contexto nº%d, sujeito \"%s\", objeto \"%s\".\n", contexto, key1, key2);
+        printf("Contexto nº%d, sujeito \"%s\", objeto \"%s\".\n",
+               contexto, sujeito, objeto);
+
+        sprintf(buff, "<li><a href=\"%s.html\">%s</a> %s <a href=\"%s.html\">%s</a></li>\n",
+                sujeito, sujeito, relacao, objeto, objeto);
+
+        dict_append_info(tmp, sujeito, buff);
+        dict_append_info(tmp, objeto, buff);
 
         contexto++;
 
-        free(tmp);
+        free(keys);
 }
 
 void dump_free_rel(gpointer key, gpointer value,
                    gpointer user_data) {
         char *rel = (char*)key;
         TupleSet ts = (TupleSet)value;
-        Dictionary dict = (Dictionary)user_data;
         printf("\n---------------- Despejando info sobre \"%s\":\n", rel);
         printf("relação envolvida em %d contextos.\n", sizeTupleSet(ts));
 
         // Processar tupleset associado.
         contexto = 0;
-        foreachTupleSet(ts, free_rel_ts_fe, dict);
+        foreachTupleSet(ts, free_rel_ts_fe, key);
 }
 
 
-void dump_manager(Manager man, char *dir) {
-        char folder[1000];
-        sprintf(folder, "cp -r ../html-template %s", dir);
-        int x = system(folder);
-        printf("A iniciar despejo da informação na diretoria \"%s\".\n", dir);
+void dump_manager(Manager man) {
+        printf("A iniciar despejo da informação na diretoria \"%s\".\n", maindir);
         printf("---------------- Dados base:\n");
         printf("-> Existem %8d descrições.\n", sizeDictionary(man->descriptions));
         printf("-> Existem %8d titulos.\n", sizeDictionary(man->titles));
         printf("-> Existem %8d relações livres.\n",
                sizeDictionary(man->free_relations));
 
-        maindir = dir;
-        Dictionary dict = makeDictionary(free);
         char *sidebar, nm[1000];
         sprintf(nm, "%s/index.html", maindir);
 
-        processa_titulos(dict, man);
-        processa_imagens(dict, man);
-        processa_descricao(dict, man);
-        processa_relacoes(dict, man);
-        processa_anexos(dict, man);
+        processa_titulos(man->reference, man);
+        processa_imagens(man->reference, man);
+        processa_descricao(man->reference, man);
+        processa_relacoes(man->reference, man);
+        processa_anexos(man->reference, man);
 
-        sidebar = make_side_bar(dict);
+        sidebar = make_side_bar(man->reference);
 
         escrever_ficheiro(nm, sidebar, NULL);
-
-        foreachDictionary(dict,
+        foreachDictionary(man->reference,
                           foreach_escrita_file, sidebar);
-
-        destroyDictionary(dict);
 }
 
 void processa_titulos(Dictionary dict, Manager man) {
-
+        tmp = man->titles;
+        foreachDictionary(dict, add_titus_fe, NULL);
 }
 
 void processa_imagens(Dictionary dict, Manager man) {
+        tmp = dict;
+        Dictionary imgs = makeDictionary(NULL);
+        TupleSet ts = getValueDictionary(man->reserved_relations, "img");
+        foreachTupleSet(ts, fe_images, imgs);
+        foreachDictionary(imgs, fe_add_images, NULL);
 
+        destroyDictionary(imgs);
 }
 
 void processa_descricao(Dictionary dict, Manager man) {
-
+        tmp = man->descriptions;
+        foreachDictionary(dict, add_desks_fe, NULL);
 }
 
 void processa_relacoes(Dictionary dict, Manager man) {
-        foreachDictionary(man->free_relations, dump_free_rel, dict);
-
+        tmp = dict;
+        foreachDictionary(man->free_relations, dump_free_rel, NULL);
 }
 
 void processa_anexos(Dictionary dict, Manager man) {
+        tmp = dict;
+        Dictionary anexs = makeDictionary(NULL);
+        TupleSet ts = getValueDictionary(man->reserved_relations, "attach");
+        foreachTupleSet(ts, fe_images, anexs);
+        foreachDictionary(anexs, fe_add_anexs, NULL);
 
+        destroyDictionary(anexs);
 }
 
 void dict_append_info(Dictionary dict, char *topic,
@@ -361,20 +412,93 @@ void escrever_ficheiro(char *nome, char *sidebar, char *info) {
         fclose(fp);
 
         free(head);
-        free(sidebar);
         free(middle);
         free(minfo);
         free(end);
 }
 
 char *make_side_bar(Dictionary dict) {
-        return strdup("");
+        GArray *arr = g_array_new(FALSE, FALSE, sizeof(char*));
+
+        foreachDictionary(dict, foreach_add_to_arr, arr);
+
+        char *sidebar = sidebar_info(arr);
+
+        g_array_free(arr, TRUE);
+
+        return sidebar;
 }
 
 void foreach_escrita_file(gpointer key, gpointer value,
                           gpointer user_data) {
         char nome[1000], *sidebar = (char*)user_data;
-        sprintf(nome, "%s/files/%s.html",
+        sprintf(nome, "%s/%s.html",
                 maindir, (char*)key);
-        escrever_ficheiro(nome, sidebar, (char*)value);
+
+        escrever_ficheiro(nome, sidebar, g_string_free((GString*)value, FALSE));
+}
+
+void foreach_add_to_arr(gpointer key, gpointer value,
+                        gpointer user_data) {
+        char *name = strdup((char*)key);
+        g_array_append_val((GArray*)user_data, name);
+}
+
+
+void add_titus_fe(gpointer key, gpointer value,
+                  gpointer user_data) {
+        char *tit = (char*)key;
+        GString *buff = (GString*)value;
+        char *title = adiciona_titulo(containsDictionary(tmp,tit) ? (char*)getValueDictionary(tmp,tit) : tit);
+        g_string_append(buff, title);
+        free(title);
+}
+
+void fe_add_images(gpointer key, gpointer value,
+                   gpointer user_data) {
+        char *tit = (char*)key;
+        GArray *arr = (GArray*)value;
+
+        char *imginfo = image_displayer(arr);
+
+        dict_append_info(tmp, tit, imginfo);
+}
+
+void add_desks_fe(gpointer key, gpointer value,
+                  gpointer user_data) {
+        char *tit = (char*)key;
+        GString *buff = (GString*)value;
+        if( containsDictionary(tmp, tit) )
+                g_string_append(buff, (char*)getValueDictionary(tmp, tit));
+        g_string_append_printf(buff, "<h2 class=\"section__title\">Relações</h2>\n");
+}
+
+void fe_images(gpointer key, gpointer value,
+               gpointer user_data) {
+        char *sujeito, *objeto,buff[2000];
+        char *keys = get_keys(key, &sujeito, &objeto),
+             *cc = strdup(objeto), *suj = strdup(sujeito);
+        Dictionary imgs = (Dictionary)user_data;
+
+        GArray *arr = (GArray*)getValueDictionary(imgs, suj);
+
+        if(!arr)
+                arr = g_array_new(FALSE, FALSE, sizeof(char*));
+
+        g_array_append_val(arr, cc);
+
+        if(!containsDictionary(imgs, suj))
+                insertDictionary(imgs, suj, arr);
+
+        free(keys);
+}
+
+void fe_add_anexs(gpointer key, gpointer value,
+                  gpointer user_data) {
+        char *tit = (char*)key;
+        GArray *arr = (GArray*)value;
+
+        char *annexinfo = add_attachments(arr);
+
+        dict_append_info(tmp, tit, annexinfo);
 }

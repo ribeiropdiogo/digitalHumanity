@@ -41,7 +41,8 @@ Acredita-se que os primeiros mamíferos surgiram no período Jurássico, entre 1
 
 @triplos:
 Mamiferos
-        reino_de animalia.
+        reino_de animalia ;
+        attach "macaco1.jpg", "macaco2.jpg" .
 
 === Repteis
 @tit: Repteis
@@ -103,6 +104,9 @@ Habitat: Tundra aberta, desde a orla das florestas ao limite dos mares polares.
         dieta carnivora ;
         reproducao ovipara ;
         img "coruja.jpg",
+                "coruja2.jpg",
+                "coruja3.jpg"  ;
+        attach "coruja.jpg",
                 "coruja2.jpg",
                 "coruja3.jpg" .
 

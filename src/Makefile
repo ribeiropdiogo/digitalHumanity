@@ -19,6 +19,9 @@ $(ODIR)/%.o : $(CDIR)/%.c $(DEPS)
 
 install: regex
 	make backend
+	cp -r ../html-template /usr/local/lib/
+	cp ${PROJ} /usr/local/bin/
+	sudo chmod 0777 /usr/local/lib/html-template /usr/local/bin/${PROJ}
 
 regex:
 	yacc -d -v ${PROJ}.y
@@ -38,3 +41,4 @@ clean:
 	rm -rf $(CDIR)/lex.*.c
 	rm -rf $(CDIR)/y.*.c
 	rm -rf $(CDIR)/y.*.h
+	rm -rf /usr/local/lib/html-template

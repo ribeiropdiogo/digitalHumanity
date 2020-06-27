@@ -8,9 +8,9 @@ typedef void (*TreatFunc)(TupleSet,TupleSet);
 
 typedef struct manager *Manager;
 
-Manager init_manager();
+Manager init_manager(char *dir);
 void apply_inter_relations(Manager man);
-void dump_manager(Manager man, char *dir);
+void dump_manager(Manager man);
 void destroy_manager(Manager man);
 void add_reference(Manager man, char *topic);
 void add_title(Manager man, char *topic, char *title);

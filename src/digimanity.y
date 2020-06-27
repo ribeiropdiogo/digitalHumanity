@@ -187,7 +187,7 @@ PalList : CPal                          { $$ = g_string_new($1); }
                                         com espaços intermédios. */
         ;
 
-CPal : Pal                              { $$ = $1; }
+CPal : Pal                              { $$ = $1;}
                                         /* Quando explicitada uma Pal, então é efetuada uma
                                         correspondencia direta entre o RHS e o LHS. */
      | Var                              { if(!containsDictionary(meta, $1)) {
@@ -251,7 +251,7 @@ int main(int argc, char **argv)
         meta = makeDictionary(NULL);
 
         // Inicializa manage principal.
-        man = init_manager();
+        man = init_manager(dumpdir);
 
         yyparse();
 
@@ -260,7 +260,7 @@ int main(int argc, char **argv)
         apply_inter_relations(man);
 
         // E, despejar o conteudo na diretoria indicada.
-        dump_manager(man, dumpdir);
+        dump_manager(man);
 
         // Limpar a memoria associada ao programa
         // Libertar o dicionario
