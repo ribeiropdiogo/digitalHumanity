@@ -168,6 +168,14 @@ int add_inter_relation(Manager man, char *relation, char *subject, char *object)
 
         TupleSet ts = (TupleSet)getValueDictionary(man->inter_relations, relation);
 
+        if( !containsDictionary(man->free_relations, subject) )
+                insertDictionary(man->free_relations, subject,
+                                 makeTupleSet());
+
+        if( !containsDictionary(man->free_relations, object) )
+                insertDictionary(man->free_relations, object,
+                                 makeTupleSet());
+
         return insertTupleSet(ts, subject, object);
 }
 
@@ -232,8 +240,7 @@ void intreat_foreach(gpointer key, gpointer value,
         TupleSet ts1 = (TupleSet)getValueDictionary(free_rel, key1);
         TupleSet ts2 = (TupleSet)getValueDictionary(free_rel, key2);
 
-        if(ts1 && ts2)
-                (*tf)(ts1, ts2);
+        (*tf)(ts1, ts2);
 
         free(tmp);
 }

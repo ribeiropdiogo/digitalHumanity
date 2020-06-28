@@ -1,0 +1,84 @@
+=== meta
+
+nome <- Península Ibérica ;
+
+=== {%nome%}
+@tit: {%nome%}
+
+A Península Ibérica está situada no sudoeste da Europa.[1] É dividida na sua maior parte por Portugal e Espanha, mas também por Andorra, Gibraltar, e pequenas frações do território de soberania francesa nas vertentes ocidentais e norte dos Pirenéus, até ao local onde o istmo está situado.[nota 1] Com uma área de cerca de 580 000 km², é a segunda maior península da Europa, ultrapassada apenas pela península Escandinava em dimensão, e em população pela Península Balcânica.[2]
+
+É a mais ocidental das três grandes penínsulas da Europa Meridional, formando quase um trapézio, a península liga-se ao resto do continente europeu pelo istmo constituído pela cordilheira dos Pirenéus, sendo rodeada a norte, oeste e parte do sul pelo Oceano Atlântico, e a restante costa sul e leste pelo mar Mediterrâneo. Os seus pontos extremos são a ocidente o Cabo da Roca, a oriente o Cabo de Creus, a sul a Ponta de Tarifa e a norte a Estaca de Bares.[3]
+
+Com uma altitude média bastante elevada, apresenta predomínio de planaltos rodeados por cadeias de montanhas, e que são atravessados pelos principais rios, de entre os quais o rio Tejo é o mais comprido, com um percurso de cerca de mil quilómetros.[4]
+
+A montanha mais alta da Península Ibérica é o Mulhacén (na serra Nevada) com 3 478,6 metros de altitude. As elevações mais importantes são a Cordilheira Cantábrica, no norte; o sistema Penibético (serra Nevada) e o sistema Bético (serra Morena), no sul; e ainda o Sistema Central de que a Serra da Estrela e a Serra da Lousã são o prolongamento ocidental.[5] Muitíssimo povoada no litoral, a Península Ibérica tem fraca densidade populacional nas regiões interiores, com exceção da Comunidade de Madrid, extremamente populosa.[6]
+
+@triplos:
+{%nome%}
+        img "iberica.jpg" ;
+        attach "https://pt.wikipedia.org/wiki/Pen%C3%ADnsula_Ib%C3%A9rica" .
+
+=== Portugal
+@tit: República Portuguesa
+
+Portugal, oficialmente República Portuguesa,[10][nota 9] é um país soberano[nota 10] unitário localizado no sudoeste da Europa, cujo território se situa na zona ocidental da Península Ibérica e em arquipélagos no Atlântico Norte. O território português tem uma área total de 92 090 km²,[11] sendo delimitado a norte e leste por Espanha e a sul e oeste pelo oceano Atlântico, compreendendo uma parte continental e duas regiões autónomas: os arquipélagos dos Açores e da Madeira. Portugal é a nação mais a ocidente do continente europeu. O nome do país provém da sua segunda maior cidade, Porto, cujo nome latino-celta era Portus Cale.
+
+O território dentro das fronteiras atuais da República Portuguesa tem sido continuamente povoado desde os tempos pré-históricos: ocupado por celtas, como os galaicos e os lusitanos, foi integrado na República Romana e mais tarde colonizado por povos germânicos, como os suevos e os visigodos. No século VIII, as terras foram conquistadas pelos mouros. Durante a Reconquista cristã foi formado o Condado Portucalense,  estabelecido no século IX por Vímara Peres, um vassalo do rei das Astúrias.[14] O condado tornou-se parte do Reino de Leão em 1097, e os condes de Portugal estabeleceram-se como governantes independentes do reino no século XII, após a batalha de São Mamede.[15] Com o estabelecimento do Reino de Portugal em 1139, cuja independência foi reconhecida em 1143. Em 1297 foram definidas as fronteiras no tratado de Alcanizes, tornando Portugal no mais antigo Estado-nação da Europa.[16][17] Nos séculos XV e XVI, como resultado de pioneirismo na Era dos Descobrimentos (ver: descobrimentos portugueses), Portugal expandiu a influência ocidental e estabeleceu um império que incluía possessões na África, Ásia, Oceânia e América do Sul, tornando-se a potência económica, política e militar mais importante de todo o mundo. O Império Português foi o primeiro império global da História[18] e também o mais duradouro dos impérios coloniais europeus, abrangendo quase 600 anos de existência, desde a conquista de Ceuta em 1415,[19] até à transferência de soberania de Macau para a China em 1999. No entanto, a importância internacional do país foi bastante reduzida durante o século XIX, especialmente após a independência do Brasil, a sua maior colónia.
+
+Com a Revolução de 1910, a monarquia terminou, tendo desde 1139 até 1910, 34 monarcas. A Primeira República Portuguesa foi muito instável, devido ao elevado parlamentarismo. O regime deu lugar à ditadura militar devido a um levantamento em 28 de maio de 1926. Em 1933, um novo regime autoritário, o Estado Novo, presidido por Salazar até 1968, geriu o país até 25 de abril de 1974. A democracia representativa foi instaurada após a Revolução dos Cravos, em 1974, que terminou a Guerra Colonial Portuguesa. As províncias ultramarinas de Portugal tornaram-se independentes, sendo as mais proeminentes Angola e Moçambique.
+
+Portugal é um país desenvolvido,[20] com um Índice de Desenvolvimento Humano (IDH) considerado como muito elevado. O país foi classificado na 19.ª posição em qualidade de vida (em 2005),[21] tem um dos melhores sistemas de saúde do planeta e é, também, uma das nações mais globalizadas e pacíficas do mundo.[22] É membro da Organização das Nações Unidas (ONU), da União Europeia (incluindo a Zona Euro e o Espaço Schengen), da Organização do Tratado do Atlântico Norte (NATO), da Organização para a Cooperação e Desenvolvimento Económico (OCDE) e da Comunidade dos Países de Língua Portuguesa (CPLP). Portugal também participa em diversas missões de manutenção de paz das Nações Unidas.
+
+@triplos:
+Portugal
+        img "brasao_portugal.png", "portugal.png" ;
+        attach "https://pt.wikipedia.org/wiki/Portugal" ;
+        pais_de {%nome%}.
+
+=== Espanha
+@tit: Reino de Espanha
+
+Espanha (em castelhano: España; [esˈpaɲa] (Sobre este somescutar (ajuda·info))), oficialmente Reino de/da Espanha (Reino de España),[nt 1][nt 2] é um país principalmente localizado na Península Ibérica na Europa. Seu território também inclui dois arquipélagos: as ilhas Canárias, na costa da África, e as ilhas Baleares, no mar Mediterrâneo. Os enclaves africanos de Ceuta e Melilla fazem da Espanha o único país europeu a ter uma fronteira terrestre com um país africano (Marrocos). Várias pequenas ilhas no mar de Alborão também fazem parte do território espanhol. A Espanha continental é limitada a sul e a leste pelo Mediterrâneo, exceto por uma pequena fronteira terrestre com Gibraltar; a norte e a nordeste pela França, por Andorra e pelo Golfo da Biscaia; e a oeste e noroeste por Portugal e pelo Oceano Atlântico. Com uma área de 505 990 quilômetros quadrados, a Espanha é o maior país da Europa Meridional, o segundo maior país da Europa Ocidental e da União Europeia (UE) e o quarto maior país de todo o continente europeu. Também é o sexto país mais populoso da Europa e o quinto da UE. A capital e maior cidade é Madri; outras grandes áreas urbanas incluem Barcelona, Valência, Sevilha, Málaga e Bilbau.
+
+Os humanos modernos chegaram pela primeira vez na Península Ibérica há cerca de 35 mil anos. As culturas ibéricas, juntamente com antigos povoamentos fenícios, gregos, celtas e cartagineses, desenvolveram-se na península até o início do domínio romano por volta de 200 a.C., quando a região era denominada Hispânia, baseada no antigo nome fenício Spania.[5] Com o colapso do Império Romano do Ocidente, confederações tribais germânicas migraram da Europa Central, invadiram a Península Ibérica e estabeleceram reinos relativamente independentes em suas províncias ocidentais, incluindo os suevos, alanos e vândalos. No final do século VI, os visigodos tinham integrado à força todos os territórios independentes remanescentes na península ao Reino de Toledo, incluindo as províncias bizantinas, o que de certa maneira unificou politicamente, eclesiasticamente e juridicamente todas as antigas províncias romanas ou reinos sucessores da antiga Hispânia.
+
+No início do século VIII, o Reino Visigótico caiu diante dos mouros, que chegaram a governar a maior parte da península no ano de 726 (com duração de até sete séculos no Reino de Granada), deixando apenas um punhado de pequenos reinos cristãos no norte. Isto levou a muitas guerras durante um longo período, o que culminou na criação dos reinos de Leão, Castela, Aragão e Navarra, que se tornaram as principais forças cristãs contra os muçulmanos. Após a conquista mourisca, os europeus iniciaram um processo gradual de retomada da região conhecido como "Reconquista",[6][7] que no final do século XV fez com que a Espanha surgisse como um país unificado sob o domínio dos Reis Católicos. No início da Era Moderna, a nação tornou-se o primeiro império mundial da história e o país mais poderoso do mundo, deixando um grande legado cultural e linguístico que inclui mais de 570 milhões de hispanófonos ao redor do mundo,[8] o que tornou o espanhol a segunda língua mais falada no mundo, depois da língua chinesa. Durante o Século de Ouro Espanhol (séculos XVI e XVII) também houve muitos avanços nas artes, com pintores mundialmente famosos, como Diego Velázquez. A mais famosa obra literária espanhola, Dom Quixote, também foi publicada durante este período. O país abriga o terceiro maior número de sítios classificados como Património Mundial pela UNESCO.
+
+A Espanha é uma democracia parlamentar secular e uma monarquia constitucional,[9] sendo que o rei Filipe VI serve como chefe de Estado. É um dos principais países desenvolvidos[10] e um país de alta renda, com a 14.ª maior economia do mundo por PIB nominal e a 16.ª maior por paridade do poder de compra. É membro das Nações Unidas (ONU), União Europeia (UE), Zona Euro, Conselho da Europa (CoE), Organização dos Estados Ibero-americanos (OEI), União para o Mediterrâneo, Organização do Tratado do Atlântico Norte (OTAN), Organização para a Cooperação e Desenvolvimento Económico (OCDE), Organização para a Segurança e Cooperação na Europa (OSCE), o Espaço Schengen, a Organização Mundial do Comércio (OMC) e muitas outros organismos internacionais. Embora não seja um membro oficial, a Espanha também é um "convidado permanente" das cúpulas do G20, participando de todos os encontros do grupo.
+
+
+@triplos:
+Espanha
+        img "brasao_espanha.png", "espanha.png" ;
+        attach "https://pt.wikipedia.org/wiki/Espanha" ;
+        pais_de {%nome%} .
+
+=== Gibraltar
+@tit: Gibraltar
+
+Gibraltar (pronúncia em português europeu: [ʒibɾaɫˈtaɾ]; pronúncia em português brasileiro [ʒibɾawˈtaʁ][nota 1]; pronúncia em inglês: [dʒɨˈbrɔːltər]; pronúncia em castelhano: [xi.βɾal'taɾ]; pronúncia em llanito: [hi.βɾaɾ'ta(:), hi'βɾaɾ.ta(:)]) é um território ultramarino britânico localizado no extremo sul da Península Ibérica. Corresponde a uma pequena península, com uma estreita fronteira terrestre a norte, é limitado, dos outros lados, pelo Mar Mediterrâneo, Estreito de Gibraltar e Baía de Gibraltar, já no Atlântico. A Espanha mantém a reivindicação sobre o Rochedo, o que é totalmente rejeitado pela população gibraltina.[1][2]
+
+O nome Gibraltar origina-se na expressão árabe jabal al-Tariq (ﺨﺒﻝﻄﺭﻕ) que significa "montanha de Tárique". A montanha, um promontório militarmente estratégico na entrada do mar Mediterrâneo, guarnece o estreito oceânico que separa a África do continente europeu. O nome é uma homenagem ao general berbere Tárique que no ano de 711 d.C. aí desembarcou, iniciando a conquista do reino visigótico.[3]
+
+Antes foi chamado pelos fenícios de Calpe, uma das Colunas de Hércules.[4] Popularmente, Gibraltar é chamada de "Gib" ou "The Rock" (o Rochedo).
+
+@triplos:
+Gibraltar
+        img "brasao_gibraltar.png", "gibraltar.png" ;
+        attach "https://pt.wikipedia.org/wiki/Gibraltar" ;
+        pais_de {%nome%} .
+
+=== Andorra
+@tit: Principado de Andorra
+
+Andorra (pronúncia em catalão: [ənˈdorə] (), pronúncia local: [anˈdɔra]), oficialmente Principado de Andorra (em catalão: Principat d'Andorra), e por vezes Principado dos Vales de Andorra (em catalão: Principat de les Valls d'Andorra), é um microestado soberano europeu, sem acesso ao mar, na Península Ibérica, nos Pirenéus orientais, limitado pela França ao norte e pela Espanha ao sul.[6] Acredita-se que tenha sido criada por Carlos Magno, Andorra foi governada pelo Conde de Urgel até 988, quando foi transferida para a Diocese de Urgel, e o principado atual foi formado por um tratado denominado Paréage em 1278.[7] É conhecido como um principado, pois é uma diarquia liderada por dois copríncipes: o bispo católico de Urgel na Espanha e o presidente da República da França.[8]
+
+Andorra é a sexta menor nação da Europa, com uma área de 468 km² e uma população de aproximadamente 77.281 habitantes.[9] Os andorranos são um grupo étnico românico de ascendência originalmente catalã.[10] Andorra é o 16º menor país do mundo em terra e o 11º menor país em população.[11] Sua capital, Andorra-a-Velha, é a capital mais alta da Europa, a uma altitude de 1.023 metros acima do nível do mar.[12] A língua oficial do país é o catalão, embora espanhol, português e francês também sejam comumente falados.[13][14]
+
+A economia andorrana está baseada no turismo, estimando-se que 10,2 milhões visitam anualmente o país.[15] Andorra não é membro da União Europeia, embora tenha adotado o euro como sua moeda oficial. É membro das Nações Unidas desde 1993.[16] Em 2013, o povo de Andorra tinha a maior expectativa de vida do mundo, com 81 anos, de acordo com o estudo Global Burden of Disease Study.[17]
+
+@triplos:
+Andorra
+        img "brasao_andorra.png", "andorra.png" ;
+        attach "https://pt.wikipedia.org/wiki/Andorra" ;
+        pais_de {%nome%} .

@@ -108,12 +108,12 @@ sp [ \t]
                                 sem espaços intermédios, e sem carateres de significado
                                 explicito, no estado TRIPLOS. */
 
-<INITIAL>([^ \t=\n.,]+|[.,])    { yylval.word = strdup(yytext);
+<INITIAL>([^ \t=\n.@,]+|[@.,])  { yylval.word = strdup(yytext);
                                 return Pal; }
                                 /* Semelhante à produção acima, contabilizando carateres
                                 de significado explicito distintos. */
 
-<META>([^ \t=\n;.,]+|[.,])      { yylval.word = strdup(yytext);
+<META>([^ \t=\n;.@,]+|[@.,])    { yylval.word = strdup(yytext);
                                   return Pal; }
                                 /* Semelhante à produção acima, contabilizando carateres
                                 de significado explicito distintos. */

@@ -2,8 +2,8 @@
 
 nome <- Jardim Zoológico de Lisboa ;
 
-=== Anfibios
-@tit: Anfibios
+=== Anfíbios
+@tit: Anfíbios
 
 Os anfíbios (do grego αμφι, amphi ('ambos') e βιο, bio ('vida'), que significa «ambas vidas» ou «em ambos meios») constituem uma classe de animais vertebrados, pecilotérmicos que não possuem bolsa amniótica agrupados na classe Amphibia. A característica mais marcante dos seres vivos da classe é o seu ciclo de vida dividido em duas fases: uma aquática e outra terrestre, apesar de haver exceções. Estão identificadas cerca de seis mil espécies vivas de anfíbios cadastradas no Amphibian Species of the World.
 
@@ -12,8 +12,10 @@ Muitos pesquisadores acreditam que os anfíbios são indicadores ecológicos e n
 Os anfíbios evoluíram no Período Devoniano e eram os principais predadores dos períodos Carbonífero e Permiano, mas muitas linhagens foram exterminadas durante a extinção do Permiano-Triássico. Um grupo, o metoposauridae, continuou um importante predador durante a Triássico, mas devido provavelmente ao fato de o mundo ter se tornado mais seco durante o Jurássico Inferior, estes foram extintos, assim como a maioria dos Temnospondyli, como o Koolasuchus, e as ordens modernas de lissanfíbios.
 
 @triplos:
-Anfibios
-        reino_de animalia.
+Anfíbios
+        reino_de Animalia ;
+        img "anfibios.png" ;
+        attach "https://pt.wikipedia.org/wiki/Anf%C3%ADbios".
 
 === Aves
 @tit: Aves
@@ -26,7 +28,10 @@ As aves, e em particular os fringilídeos de Darwin, tiveram um papel importante
 
 @triplos:
 Aves
-        reino_de animalia.
+        reino_de Animalia ;
+        img "aves.jpg", "aves2.jpeg" ;
+        attach "https://pt.wikipedia.org/wiki/Aves",
+                "https://www.zoo.pt/pt/conhecer/animais/aves/".
 
 === Mamiferos
 @tit: Mamiferos
@@ -41,11 +46,12 @@ Acredita-se que os primeiros mamíferos surgiram no período Jurássico, entre 1
 
 @triplos:
 Mamiferos
-        reino_de animalia ;
+        reino_de Animalia ;
+        img "mamiferos.jpg" ;
         attach "macaco1.jpg", "macaco2.jpg" .
 
-=== Repteis
-@tit: Repteis
+=== Répteis
+@tit: Répteis
 
 Os répteis (latim científico: Reptilia) constituem uma classe de animais vertebrados tetrápodes e ectotérmicos, ou seja, não possuem temperatura corporal constante. São todos amniotas (animais cujos embriões são rodeados por uma membrana amniótica), característica que os permitiu ficarem independentes da água para reprodução, ao contrário dos anfíbios. Os répteis atuais são representados por quatro ordens: Testudines, Crocodylia, Squamata e Rhynchocephalia.
 
@@ -56,8 +62,9 @@ Os répteis são encontrados em todos os continentes, apesar de suas principais 
 Os dinossauros, extintos no final do Mesozoico, pertencem à superordem Dinosauria, também integrada na classe dos répteis. Outros répteis pré-históricos são os membros das ordens Pterosauria, Plesiosauria e Ichthyosauria.
 
 @triplos:
-Repteis
-        reino_de animalia.
+Répteis
+        reino_de Animalia ;
+        img "repteis.jpg".
 
 # Definicao de animais.
 === Axolote
@@ -76,12 +83,14 @@ Habitat: lagos de água doce, com fundo escuro e vegetação abundante.
 
 @triplos:
 Axolote
-        familia_de Anfibios ;
-        vida_social solitaria ;
-        atividade noturna ;
-        dieta omnivera ;
-        reproducao Ovípara ;
-        img "aoxolote.png".
+        familia_de Anfíbios ;
+        vida_social Solitário ;
+        atividade Noturno ;
+        dieta Omnívoro ;
+        reprodução Ovípara ;
+        img "axolote.jpg" ;
+        attach "https://pt.wikipedia.org/wiki/Ambystoma_mexicanum",
+                "https://www.zoo.pt/pt/conhecer/animais/anfibios-e-outros/axolote/".
 
 === "Coruja das Neves"
 @tit: Bubo scandiaca
@@ -99,10 +108,10 @@ Habitat: Tundra aberta, desde a orla das florestas ao limite dos mares polares.
 @triplos:
 "Coruja das Neves"
         familia_de Aves ;
-        vida_social casal ;
-        actividade crepuscular, diurna ;
-        dieta carnivora ;
-        reproducao ovipara ;
+        vida_social Casal ;
+        actividade Crepuscular, Diurno ;
+        dieta Carnívoros ;
+        reprodução Ovípara ;
         img "coruja.jpg",
                 "coruja2.jpg",
                 "coruja3.jpg"  ;
@@ -126,10 +135,10 @@ Habitat: Floresta tropical húmida e floresta seca de savana.
 @triplos:
 Chimpanzé
         familia_de Mamiferos ;
-        vida_social familiar ;
-        actividade diurna ;
-        dieta omnivora ;
-        reproducao vivipara ;
+        vida_social Familiar ;
+        actividade Diurno ;
+        dieta Omnívoro ;
+        reprodução Vivipara ;
         img "macaco1.jpg", "macaco2.jpg" .
 
 === "Pitão da Birmânia"
@@ -148,9 +157,189 @@ Zonas húmidas (vales de rios, florestas densas e, ocasionalmente, plantações)
 
 @triplos:
 "Pitão da Birmânia"
-        familia_de Repteis ;
-        vida_social solitaria ;
-        actividade crepuscular, noturna;
-        dieta carnivora ;
-        reproducao ovipara ;
+        familia_de Répteis ;
+        vida_social Solitário ;
+        actividade Crepuscular, Noturno;
+        dieta Carnívoros ;
+        reprodução Ovípara ;
         img "pitao1.jpg", "pitao2.jpg" .
+
+=== Carnívoros
+@tit: Carnívoros
+
+Os carnívoros (latim científico: Carnivora) constituem uma ordem de animais mamíferos placentários, encontrados em quase todo o mundo. Suas características comuns são a presença de pés com quatro ou cinco dedos, apresentando garras; machos com báculo; e dentes adaptados para cortar, com presença de caninos fortes, cônicos e pontiagudos.
+
+Alguns carnívoros, como os gatos e os pinípedes, dependem inteiramente da carne para a sua nutrição. Outros, como os guaxinins e os ursos, dependendo do habitat local, são mais onívoros: o panda gigante é quase que exclusivamente um herbívoro, mas também consome peixes, ovos e insetos, enquanto que o urso polar subsiste principalmente de focas. Os carnívoros têm dentes e garras adaptadas para capturar e mastigar a carne de outros animais. Muitos caçam em bandos e são animais sociais, dando-lhes uma vantagem sobre presas maiores.
+
+Esses tipos de animais caracterizados por possuírem um aparato carniceiro (dentes pré-molar superior e primeiro molar inferior com cúspides em forma de lâminas) que facilita a mastigação dos animais.
+
+@triplos:
+Carnívoros
+        reino_de Animalia ;
+        img "carnivoro.jpg" ;
+        attach "https://pt.wikipedia.org/wiki/Carn%C3%ADvoros".
+
+=== Diurno
+@tit: Diurno
+
+Diurno é um adjetivo que define os acontecimentos ou atividades exercidas dentro de um período de 24 horas; diurnal.
+
+O termo diurno também é utilizado para designar o que ocorre durante o dia, ou seja, entre o nascer do sol e o pôr do sol. Exemplo: escola diurna, curso diurno, trabalho diurno e etc.
+
+O período do tempo diurno pode ser subdividido em duas partes: diurno matutino e diurno vespertino. O período matutino corresponde a parte da manhã, que normalmente vai entre às 6h e o meio dia. O período vespertino é a parte da tarde, marcado entre às 13h e às 18h, no Brasil.
+
+Dentro dos estudos da botânica, o diurno é uma característica que faz com que algumas plantas permaneçam abertas durante o dia e fechadas durante a noite.
+
+Já na zoologia, o termo está vinculado às atividades que são desempenhadas durante o dia; diz-se dos pássaros diurnos. A maioria dos seres humanos estão acostumados a manter uma vida diurna.
+
+No âmbito religiosos, a palavra diurno diz respeito a um livre que contém as orações das horas menores do breviário.
+
+@triplos:
+Diurno
+        img "diurno.jpg" ;
+        attach "https://www.significados.com.br/diurno/" .
+
+=== Omnívoro
+@tit: Omnívoro
+
+Os omnívoros (pt) ou onívoros (pt-BR)[1][2] são os animais com capacidade para metabolização de diferentes classes alimentícias, com uma dieta alimentar menos restrita que a dos carnívoros ou herbívoros. Normalmente são predadores, mas têm o aparelho digestivo adaptado a metabolizar diferentes tipos de alimentos.
+
+Os mamíferos que são omnívoros, por exemplo, têm dentes caninos menos desenvolvidos que os carnívoros e os incisivos e molares menos complexos que os herbívoros. Onívoros também utilizam mecanismos diferentes para as funções de absorção e digestão,[3] sendo na sua maioria oportunistas capazes de consumir — e consomem — produtos de origem animal e vegetal,[2] assegurando assim uma boa saúde a longo prazo, assim como boa fertilidade.
+
+Citações sobre as características dos omnívoros já se encontravam em obras mais antigas, como o Compendio de Veterinaria ou Medicina dos Animaes Domesticos, de 1852.
+
+«Os omnívoros podem sofrer longa abstinência sem grande alteração na sua saúde, e tem-se observado que o cão ou o gato vive de vinte a trinta dias sem comer, ao passo que o cavalo ou o boi não pode resistir por mais de seis a oito dias a uma abstinência absoluta. (...) Grande abstinência de alimentos produz efeitos diversos nos herbívoros e omnívoros: os primeiros tornam-se tristes, abatidos e prostrados de forças; os segundos furiosos, chegando até a manifestar sinais de raiva.»
+
+Exemplos de omnívoros da classe Mammalia são: ser humano, chimpanzé, urso, morcego, rato, lobo-guará e suricato.
+
+@triplos:
+Omnívoro
+        img "humano.jpg" ;
+        attach "https://pt.wikipedia.org/wiki/Omn%C3%ADvoro" .
+
+=== Ovípara
+@tit: Ovípara
+
+Em biologia, os animais ovíparos são aqueles cujo embrião se desenvolve dentro de um ovo em ambiente externo sem ligação com o corpo da mãe.
+
+Este é o método de reprodução da maioria dos peixes, anfíbios, répteis, todas as aves, os monotremados, e a maioria dos insetos, moluscos e alguns aracnídeos.
+
+Ao ato de colocação dos ovos no ambiente pela fêmea, seja num ninho de palha, num buraco cavado no chão para esse fim, na superfície de uma folha ou em outros sítios, dá-se o nome de ovoposição.
+
+@triplos:
+Ovípara
+        img "ovo_tartaruga.jpg" ;
+        attach "https://pt.wikipedia.org/wiki/Oviparidade" .
+
+=== Familiar
+@tit: Familiar
+
+O ciclo de vida familiar é definido como fases sucessivas de um processo de expansão e realinhamento do sistema, para suportar a entrada, a saída e o desenvolvimento dos membros da família.
+
+O primeiro grupo social ao qual o indivíduo se insere é a família onde ele nasce. Portanto, o período de vida de cada pessoa, está contido no ciclo de vida familiar que abrange vários estágios, envolvendo valores, ritos familiares e mitos das gerações: nascimento, infância, adolescência, vida adulta, terceira idade e morte.
+
+A família é o modelo básico de socialização das pessoas e é definida como um sistema vivo, uma rede de relações com regras, costumes, valores e crenças que constantemente faz troca com o meio social.
+
+As modificações pelas quais ela passa estão diretamente relacionadas às da sociedade. Atualmente não existe um modelo único de família. Elas constroem valores, regras e modelos de afetividade, baseados na sua própria história, com várias realidades e diferentes contextos.
+
+Temos observado que a família brasileira passa por uma fase de transformação do seu modelo de organização nuclear tradicional, que seria pai, mãe e filhos vivendo sob o mesmo teto. O papel paterno foi ampliado para além das tarefas de provedor, a partir da inserção da mulher no mercado de trabalho. O aumento do número de divórcios, uniões não formalizadas, mulheres sozinhas cuidando da família, são alguns dos vários aspectos que têm contribuído para estas mudanças.
+
+Essas transformações trouxeram muitos desafios: sobrecarga de trabalho, lidar com ansiedades e temores frente à violência urbana, violência doméstica, desemprego, abuso de drogas lícitas e ilícitas, dentre outros.
+
+Estudos apontam que muitos desses desafios têm trazido um aumento do nível de estresse intrafamiliar, repercutindo assim diretamente nas suas diferentes fases.
+
+A maneira como a família vivencia a passagem pelas fases, pode ocasionar dificuldades e problemas nos eventos intrafamiliares, tais como dependência de drogas, violência, negligência, rompimentos, entre outros, podendo ter um efeito que atue por longo tempo.
+
+A reflexão sobre esse tema é muito importante para fornecer informações sobre a natureza, o aparecimento e a periodicidade dos sintomas presentes nas diferentes fases, que podem trazer dificuldades na dinâmica familiar, podendo ocorrer a necessidade de ajuda profissional.
+
+@triplos:
+Familiar
+        img "familia.jpg" ;
+        attach "https://rsaude.com.br/videos/materia/mudancas-no-ciclo-de-vida-familiar/5592" .
+
+=== Casal
+@tit: Casal
+
+Um casal é um par (conjunto de 2) de pessoas, animais ou coisas que mantêm entre si algum relacionamento ou que têm semelhanças em comum. O termo também é usado para fazer referência a cada um destes pares relativamente a outros. Por exemplo: “Vejam só este casal de gatinhos tão queridos!”, “A Fátima e o David fazem um casal muito bonito”.
+
+O termo tende a estar associado aos laços sentimentais que nutrem duas pessoas e que as une. O namoro (ou compromisso), o noivado ou ainda o casamento supõem a existência de um casal. A composição mais habitual dos casais é homem-mulher (ou seja, casais heterossexuais), embora, hoje em dia, os casais homem-homem ou mulher-mulher (casais homossexuais) gozem de um reconhecimento social e jurídico cada vez maior. Convém destacar que o termo casal prende-se com o vínculo amoroso e não com o estatuto jurídico da relação: há casais circunstanciais, casais de amigos, de namorados e outros que chegam a casar-se (casal de cônjuges ou esposos), etc.: “Eu não conheço aquele casal de lado nenhum…”, “O meu irmão acabou por vender a sua casa de férias a um casal recém-casado”.
+
+No que diz respeito aos animais, um casal é composto por um macho e uma fêmea. Estes não estão necessariamente unidos por laços afetivos, mas tentam conjuntamente fazer as suas tarefas por questões de sobrevivência, isto é, para se alimentarem (a eles e às respectivas crias), se abrigarem, etc. Os casais de pombos, por exemplo, para além de irem atrás de alimento (insetos, neste caso), reúnem minuciosa e pacientemente pequenos paus com vista a fazerem o seu ninho em sítios ao abrigo da chuva.
+
+Há casais que unem-se por fins políticos ou econômicos, esses são os chamados casamentos de conveniência ou “casamentos de fachada”. O casal que se une por esse meio tem o objetivo de conseguir vantagem social, política ou econômica, sendo que em quase todas as vezes não existe um vínculo sentimental entre as partes envolvidas. E apesar dessa união ser feitas em alguns países, ela é considerada crime em países como Portugal e Brasil.
+
+Mas, geralmente, quando um casal é formado é porque aquelas duas pessoas resolveram compartilhar a vida juntos, podendo eles estarem ou não casados de forma legal. Desde que o homem existe os casais são formados, sendo que o principal objetivo dessa união era a sobrevivência da espécie.
+
+Pesquisadores descobriram que nessa época haviam mulheres, na Europa Ocidental, que viajam longas distâncias e casavam-se com homens de outros locais, não se sabe se por vontade própria ou porque queriam. Nesse período, que é chamado de “idade da pedra”, era comum que as mulheres viajassem por quilômetros para encontrar locais para fixar família e troca objetos.
+
+Foi na Alemanha também onde se descobriu a existência de casais e família na época da pré-história, depois que fora, descobertos ossos que pertenciam a uma família com um homem, uma mulher e duas crianças. O parentesco deles foi comprovado por meio de testes de DNA. Segundo pesquisadores, os restos mortais dessa família remontam 4,6 mil anos.
+
+Casal ainda é um termo usado para se referir a um povoado ou vilarejo, contudo, esse termo é pouco empregado.
+
+Por fim, chama-se casal agrícola a uma unidade constituída por uma casa de habitação com dependências para fins de exploração rural e por terrenos suficientemente amplos para a manutenção de uma família de cultivadores.
+
+@triplos:
+Casal
+        img "casal.jpg" ;
+        attach "https://conceito.de/casal" .
+
+=== Animalia
+@tit: Animalia
+
+Animalia, Animal ou Metazoa[1] é um reino biológico composto por seres vivos pluricelulares, Eucariontes, heterotróficos, cujas células formam tecidos biológicos, com capacidade de responder ao ambiente (possuem tecido nervoso) que os envolve ou, por outras palavras, pelos animais.
+
+A maioria dos animais possui um plano corporal que se determina à medida que se tornam maduros e, exceto em animais que metamorfoseiam, esse plano corporal é estabelecido desde cedo em sua ontogenia quando embriões. O estudo científico dos animais é chamado zoologia, que tradicionalmente estudava, não só os seres vivos com as características descritas acima, mas também os protozoários. Como resultado de estudos filogenéticos, consideram-se os Protistas como um grupo separado dos animais.
+
+A palavra "animal" é derivada do latim anima, no sentido de fôlego vital, e entrou na língua portuguesa através da palavra animalis. Animalia é seu plural.[4] A definição biológica da palavra refere-se a todos os membros do reino Animalia, englobando organismos tão diversos como esponjas, medusas, insetos e seres humanos. Coloquialmente, o termo "animal" é frequentemente utilizado para referir-se a todos os animais diferentes dos humanos, e raramente para referir-se a animais não classificados como Metazoários.
+
+Os metazoários mais simples apresentam simetria radial - por esta razão, são classificados como Radiata (em contraposição com os Bilateria, que têm simetria bilateral). Estes animais são diploblásticos, isto é, possuem apenas dois folhetos embrionários. A camada exterior (ectoderme) corresponde à superfície da blástula e a camada interior (endoderme) é formada por células que migram para o interior. Ela então se invagina para formar uma cavidade digestiva com uma única abertura, (o arquêntero). Esta forma é chamada gástrula (ou plânula quando ela é livre-natante). Os Cnidaria e os Ctenophora (águas vivas, anémonas, corais, etc) são os principais filos diploblásticos.[5] Os Myxozoa, um grupo de parasitas microscópicos, têm sido considerados cnidários reduzidos, porém, podem ser derivados dos Bilateria. As formas restantes, formam um grupo chamado Bilateria, uma vez que eles apresentam simetria bilateral e são triploblásticos. A blástula invagina sem se preencher previamente, então a endoderma é apenas seu forro interior, a parte interna é preenchida para formar o terceiro folheto embrionário, a mesoderme. Os animais mais simples dentre estes são os Platyhelminthes (vermes achatados, como a tênia).
+
+@triplos:
+Animalia
+        img "animalia.png" ;
+        attach "https://pt.wikipedia.org/wiki/Animalia".
+
+=== Vivipara
+@tit: Vivipara
+
+Em biologia, designam-se como vivíparos os animais cujo embrião se desenvolve dentro do corpo da mãe, numa placenta que lhe fornece nutrientes necessários ao seu desenvolvimento e retira os produtos de excreção.
+
+São vivíparos a maior parte dos mamíferos e alguns peixes, répteis, anfíbios e insetos.
+
+@triplos:
+Vivipara
+        img "vivipara.jpg" ;
+        attach "https://pt.wikipedia.org/wiki/Viviparidade".
+
+=== Noturno
+@tit: Noturno
+
+Adjetivo Que se faz de noite. Que anda de noite. substantivo masculino Liturgia Parte do ofício das matinas, que se compõe de certos salmos e lições.
+
+@triplos:
+Noturno
+        attach "https://www.dicio.com.br/noturno/" .
+
+=== Solitário
+@tit: Solitário
+
+Solidão não é o mesmo que estar desacompanhado. Muitas pessoas passam por momentos em que se encontram sozinhas, seja por força das circunstâncias ou por escolha própria. Estar sozinho pode ser uma experiência positiva, prazerosa e trazer alívio emocional, desde que esteja sob controle do indivíduo. Solitude é o estado de se estar sozinho e afastado das outras pessoas, e geralmente implica numa escolha consciente. A solidão não requer a falta de outras pessoas e geralmente é sentida mesmo em lugares densamente ocupados. Pode ser descrita como a falta de identificação, compreensão ou compaixão.
+
+Em seu crescimento como indivíduo, o ser humano começa um processo de separação ainda no nascimento, a partir do qual continua a ter uma independência crescente até a idade adulta. Desta forma, sentir-se sozinho pode ser uma emoção saudável e, de fato, a escolha de ficar sozinho durante um período de solitude pode ser enriquecedora. Para sentir solidão, entretanto, o indivíduo passa por um estado de profunda separação. Isto pode se manifestar em sentimentos de abandono, rejeição, depressão, insegurança, ansiedade, falta de esperança, inutilidade, insignificância e ressentimento. Se tais sentimentos são prolongados eles podem se tornar debilitantes e bloquear a capacidade do indivíduo de ter um estilo de vida e relacionamentos saudáveis. Se o indivíduo está convencido de que não pode ser amado, isto vai aumentar a experiência de sofrimento e o consequente distanciamento do contato social. A baixa auto-estima pode dar início à desconexão social que pode levar à solidão.
+
+Em algumas pessoas, a solidão temporária ou prolongada pode levar a notáveis expressões artísticas e criativas como, por exemplo, Emily Dickinson e Isabella di Morra. Isto não implica dizer que a solidão desencadeia criatividade, ela simplesmente foi, neste caso, uma influência no trabalho então realizado pelo artista.
+
+@triplos:
+Solitário
+        img "solitaria.jpg" ;
+        attach "https://pt.wikipedia.org/wiki/Solid%C3%A3o".
+
+=== Crepuscular
+@tit: Crepuscular
+
+Crepuscular é um termo usado para descrever animais que são primariamente ativos durante o crepúsculo, ou seja, no amanhecer e no anoitecer.[1] A palavra é derivada do Latim crepusculum, que significa "crepúsculo".[1] Crepuscular está então em contraste com os comportamentos diurno e noturno. Animais crepusculares podem também ser ativos em uma noite de lua clara. Muitos animais que são casualmente descritos como noturnos são na verdade crepusculares. Dentro da definição de crepuscular estão os termos matutino (ou "matinal") e vespertino, denotando espécies ativas no amanhecer e anoitecer, respectivamente. Pandas eram considerados nesta categoria: crepuscular, no entanto, Zhang Jindong descobriu que pandas podem pertencer a uma categoria própria.
+
+@triplos:
+Crepuscular
+        img "cresp.jpg" ;
+        attach "https://pt.wikipedia.org/wiki/Crepuscular".

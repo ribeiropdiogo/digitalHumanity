@@ -1,0 +1,14 @@
+=== meta
+
+pai_de inverse_of filho_de ;
+pai_de synonym progenitor_de ;
+
+=== Rodrigo
+@tit: Rodrigo Pires
+
+lorem ipsum sid amet.
+
+@triplos:
+Rodrigo
+	pai_de Pedro ;
+	filho_de Joel .

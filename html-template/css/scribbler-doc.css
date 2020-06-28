@@ -15,6 +15,14 @@ html, body {
   flex-grow: 1;
 }
 
+img {
+        height: 350px;
+        width: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+}
+
 /* logo */
 .logo {
   font-weight: 900;

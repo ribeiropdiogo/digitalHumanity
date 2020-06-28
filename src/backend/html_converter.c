@@ -65,7 +65,7 @@ char *image_displayer(GArray* array) {
         if( array->len == 1 ) {
                 elem = g_array_index(array, char*, 0);
                 g_string_append_printf(str,
-                                       "<img src=\"images/%s\" style=\"height:300px\" class=\"center\"/>\n",
+                                       "<img src=\"images/%s\" class=\"img\"/>\n",
                                        elem);
         } else if( array->len > 1) {
                 g_string_append_printf(str,
@@ -77,7 +77,7 @@ char *image_displayer(GArray* array) {
                         g_string_append_printf(str, "<div class=\"mySlides fade\">\n");
 
                         g_string_append_printf(str,
-                                               "<img src=\"images/%s\" style=\"height:300px\" class=\"center\">\n", elem);
+                                               "<img src=\"images/%s\" class=\"img\">\n", elem);
 
                         g_string_append_printf(str, "</div>\n");
                 }
